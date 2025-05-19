@@ -1,0 +1,51 @@
+$utilities: map-merge(
+  $utilities,
+  (
+    "font-size":
+      map-merge(
+        map-get($utilities, "font-size"),
+        (
+          responsive: true,
+        )
+      ),
+    "opacity":
+      map-merge(
+        map-get($utilities, "opacity"),
+        (
+          responsive: true,
+          state: hover,
+          values: (
+            0: 0,
+            25: .25,
+            50: .5,
+            70: .7,
+            75: .75,
+            100: 1,
+          )
+        )
+      ),
+    "color": 
+      map-merge(
+        map-get($utilities, "color"),
+        (
+          state: hover,
+        ),
+      ),
+    "background-color": 
+      map-merge(
+        map-get($utilities, "background-color"),
+        (
+          state: hover,
+        ),
+      ),
+    "transition": (
+      property: transition,
+      class: transition,
+      responsive: true,
+      values: (
+        base: $transition-base,
+        fade: $transition-fade,
+      ),
+    )
+  )
+);
