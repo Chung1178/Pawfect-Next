@@ -1,0 +1,19 @@
+@import "../styles/bootstrap-essentials";
+
+.searchBanner {
+  background-image: url('/search-page/banner-top-circle-sm.svg'),
+                    url('/search-page/banner-top-line-sm.svg'),
+                    url('/search-page/banner-bottom-circle-sm.svg'),
+                    url('/search-page/banner-bottom-line-sm.svg');
+  background-repeat: no-repeat;
+  background-position: top right, top right, left bottom, left bottom;
+
+  @include media-breakpoint-up(lg) {
+    background-image: url('/search-page/banner-top-circle-md.svg'),
+                      url('/search-page/banner-top-line-md.svg'),
+                      url('/search-page/banner-bottom-circle-md.svg'),
+                      url('/search-page/banner-bottom-line-md.svg');
+    background-position: top right 6%, top 28% right 6%, bottom left 6%, bottom left 6%;
+    background-repeat: no-repeat;
+  }
+}
