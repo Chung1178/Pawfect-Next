@@ -17,3 +17,17 @@
     background-repeat: no-repeat;
   }
 }
+
+.sitter-detail-banner {
+  height: 535px;
+
+  @include media-breakpoint-up(lg) {
+    height: 340px;
+    background-image: url('/search-page/banner-top-circle-md.svg'),
+                      url('/search-page/banner-top-line-md.svg'),
+                      url('/search-page/banner-bottom-circle-md.svg'),
+                      url('/search-page/banner-bottom-line-md.svg');
+    background-position: top right 6%, top 28% right 6%, bottom left 6%, bottom left 6%;
+    background-repeat: no-repeat;
+  }
+}
