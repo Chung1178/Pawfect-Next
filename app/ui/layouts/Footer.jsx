@@ -1,7 +1,7 @@
-export default function Footer (){
-    return (
-        <>
-        我是Footer
-        </>
-    )
+export default function Footer() {
+  return (
+    <>
+      <div>我是Footer</div>
+    </>
+  );
 }

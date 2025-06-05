@@ -1,0 +1,28 @@
+@import "./bootstrap-essentials";
+
+.bg-gradient-light {
+  background: linear-gradient(90deg, #fff7f0 0%, #ffffff 50%, #fff7f0 100%);
+}
+
+.bg-gradient-primary-banner {
+  background: linear-gradient(90deg, #ffab82 0%, #f6844d 50%, #ffab82 100%);
+}
+
+@include media-breakpoint-up(md) {
+  .dog-foot-title-md {
+    position: relative;
+    &::after {
+      position: absolute;
+      left: -55px;
+      top: -50%;
+      content: '';
+      width: 74px;
+      height: 60px;
+      background-image: url('/dog-foot.svg');
+    }
+  }
+}
+
+.w-fit-content {
+  width: fit-content;
+}
