@@ -50,7 +50,7 @@ export default function SittersPage() {
                   <div className="card bg-transparent border-0">
                     <img
                       src={sitter.profilePictureUrl}
-                      className="card-img-top object-fit-cover mb-5"
+                      className={`${style.sitterCardImage} card-img-top object-fit-cover mb-5`}
                       alt="..."
                     />
                     <div className="card-body p-0">
@@ -65,21 +65,21 @@ export default function SittersPage() {
                         <span className="fs-10 text-primary me-1">
                           {sitter.rating.toFixed(1)}
                         </span>
-                        <span className="fs-10 text-grey-500 me-1">
+                        <span className="fs-10 text-gray-500 me-1">
                           ({sitter.reviewCount})
                         </span>
                         <MapPinIcon
-                          className="me-1 text-grey-500"
+                          className="me-1 text-gray-500"
                           style={{ width: '16px', height: '16px' }}
                         />
-                        <span className="fs-10 text-grey-500 me-1">
+                        <span className="fs-10 text-gray-500 me-1">
                           {sitter.address?.city},{sitter.address?.district}
                         </span>
                         <UserIcon
-                          className="me-1 text-grey-500"
+                          className="me-1 text-gray-500"
                           style={{ width: '16px', height: '16px' }}
                         />
-                        <span className="fs-10 text-grey-500">
+                        <span className="fs-10 text-gray-500">
                           ({sitter.totalBookingsCompleted})
                         </span>
                       </div>
