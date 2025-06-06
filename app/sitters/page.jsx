@@ -26,7 +26,7 @@ export default function SittersPage() {
   return (
     <>
       <main>
-        <section className="bg-gradient-primary-banner">
+        <section className="bg-gradient-primary-banner mt-lg-21 mt-17">
           <div className={style.searchBanner}>
             <div className="container pt-11 pb-18 pt-md-16 pb-md-42">
               <h1 className="text-light fs-5 fs-md-3 fs-lg-2 dog-foot-title-md w-fit-content mx-auto">

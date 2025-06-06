@@ -19,10 +19,12 @@
 }
 
 .sitter-detail-banner {
+  top: 64px;
   height: 535px;
   background: linear-gradient(90deg, #ffab82 0%, #f6844d 50%, #ffab82 100%);
 
   @include media-breakpoint-up(lg) {
+    top: 80px;
     height: 340px;
     background:
     url('/booking-page/背景下方圓圈.svg') bottom right no-repeat,
