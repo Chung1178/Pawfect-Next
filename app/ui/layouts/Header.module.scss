@@ -1,0 +1,31 @@
+@import "../styles/bootstrap-essentials";
+
+.headerNavBgColor {
+  background-color: $primary-400; 
+
+  @include media-breakpoint-up(lg) {
+    background-color: #fff;
+  }
+}
+
+.navbarShadow {
+  box-shadow: 0px 4px 80px 0px rgba(246, 132, 77, 0.2); 
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.navItem {
+  &:hover {
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
+  }
+}
+
+@include media-breakpoint-down(lg) {
+  // 針對 Bootstrap 的 .offcanvas-top class
+  // 如果這段 SCSS 是在 Header.module.scss 中，
+  // 並且 offcanvas 的 DOM 結構不在 Header 組件的根元素內，
+  // 可能需要使用 :global() 來確保能選取到全域的 Bootstrap class。
+  :global(.offcanvas-top) {
+    height: 100vh !important;
+  }
+}

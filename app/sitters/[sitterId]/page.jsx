@@ -115,10 +115,10 @@ export default async function SitterPage({ params }) {
     <>
       <main className="position-relative bg-gradient-light pb-13 pb-lg-31">
         <div
-          className={`${style['sitter-detail-banner']} position-absolute top-0 w-100`}
+          className={`${style['sitter-detail-banner']} position-absolute w-100`}
         ></div>
         <section>
-          <div className="container pt-9 pt-lg-26">
+          <div className="container pt-25 pt-lg-42">
             <div className="row">
               <div className="col-lg-8">
                 <div className="mb-9 mb-lg-17">
@@ -250,7 +250,7 @@ export default async function SitterPage({ params }) {
                 </div>
               </div>
               <div className="col-lg-4 d-none d-lg-block">
-                <div className="sticky-lg-top" style={{ top: '1.5rem' }}>
+                <div className="sticky-lg-top" style={{ top: '6.5rem' }}>
                   <SitterInfoCard
                     id={id}
                     name={name}
