@@ -1,10 +1,9 @@
-
-'use client'; 
+'use client';
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import styles from './Header.module.scss'; 
+import styles from './Header.module.scss';
 
 export default function Header() {
   const [hasScrolled, setHasScrolled] = useState(false);
@@ -29,12 +28,14 @@ export default function Header() {
   const navLinks = [
     { href: '/sitters', text: '搜尋保母' },
     { href: '/become-a-sitter', text: '成為保母' },
-    { href: '/#index-qna', text: '常見問題' }, 
+    { href: '/#index-qna', text: '常見問題' },
   ];
 
   return (
     <nav
-      className={`navbar fixed-top navbar-expand-lg py-lg-4 py-3 bg-light ${hasScrolled ? styles.navbarShadow : ''}`}
+      className={`navbar fixed-top navbar-expand-lg py-lg-5 py-4 bg-light ${
+        hasScrolled ? styles.navbarShadow : ''
+      }`}
       id="navbar"
     >
       <div className="container">
@@ -75,7 +76,7 @@ export default function Header() {
           id="offcanvasNavbar"
           aria-labelledby="offcanvasNavbarLabel"
         >
-          <div className={`offcanvas-header p-3 ${styles.headerNavBgColor}`}>
+          <div className={`offcanvas-header p-4 ${styles.headerNavBgColor}`}>
             <Link href="/" className="navbar-brand">
               <Image
                 src="/layout/layout-header-logo-sm.png"
@@ -92,12 +93,12 @@ export default function Header() {
             ></button>
           </div>
           <div
-            className={`offcanvas-body d-flex flex-column flex-lg-row px-3 px-lg-0 ${styles.headerNavBgColor}`}
+            className={`offcanvas-body d-flex flex-column flex-lg-row px-4 px-lg-0 ${styles.headerNavBgColor}`}
           >
-            <ul className="navbar-nav flex-grow-1 mb-12 mb-lg-0">
+            <ul className="navbar-nav flex-grow-1 mb-13 mb-lg-0">
               {navLinks.map((link) => (
                 <li
-                  className={`nav-item my-8 my-lg-0 mx-lg-11 ${styles.navItem}`}
+                  className={`nav-item my-9 my-lg-0 mx-lg-12 ${styles.navItem}`}
                   key={link.href}
                 >
                   <Link href={link.href} className="nav-link link-gray-100">
@@ -130,7 +131,7 @@ export default function Header() {
               </Link>
               <Link
                 href="/register"
-                className="btn btn-primary w-100 w-lg-auto text-white mb-3 mb-lg-0"
+                className="btn btn-primary w-100 w-lg-auto text-white mb-4 mb-lg-0"
               >
                 註冊
               </Link>

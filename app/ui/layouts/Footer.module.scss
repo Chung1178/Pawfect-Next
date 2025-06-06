@@ -1,20 +1,20 @@
-@import "../styles/bootstrap-essentials";
+@import '../styles/bootstrap-essentials';
 
 .bg-gradient-thirdly {
-    background: linear-gradient(123.31deg, #86a9c2 0%, #adc9db 100%);
-  }
+  background: linear-gradient(123.31deg, #86a9c2 0%, #adc9db 100%);
+}
 
 .footerLogo {
   width: 140px;
-  
+
   @include media-breakpoint-up(md) {
     width: 178px;
   }
 }
 
 .socialIcons {
-  a { 
-    display: inline-block; 
+  a {
+    display: inline-block;
     transition: transform 250ms ease;
 
     &:hover {
