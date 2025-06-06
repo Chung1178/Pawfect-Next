@@ -1,14 +1,15 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import styles from './Header.module.scss';
+import { Offcanvas } from 'bootstrap';
 
 export default function Header() {
   const [hasScrolled, setHasScrolled] = useState(false);
+  const offcanvasRef = useRef(null);
 
-  // 偵測頁面滾動以添加陰影效果
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 10) {
@@ -25,6 +26,37 @@ export default function Header() {
     };
   }, []);
 
+  useEffect(() => {
+    const offcanvasElement = offcanvasRef.current;
+    let bsOffcanvas; 
+
+    if (offcanvasElement) {
+      bsOffcanvas = new Offcanvas(offcanvasElement, {
+        backdrop: false,
+      });
+    }
+
+    return () => {
+      if (bsOffcanvas && typeof bsOffcanvas.dispose === 'function') {
+        bsOffcanvas.dispose();
+      }
+    };
+  }, []);
+
+  const handleLinkClick = () => {
+    const offcanvasInstance = Offcanvas.getInstance(offcanvasRef.current);
+    if (offcanvasInstance) {
+      offcanvasInstance.hide();
+    }
+  };
+
+  const toggleOffcanvas = () => {
+    const offcanvasInstance = Offcanvas.getInstance(offcanvasRef.current);
+    if (offcanvasInstance) {
+      offcanvasInstance.toggle();
+    }
+  };
+
   const navLinks = [
     { href: '/sitters', text: '搜尋保母' },
     { href: '/become-a-sitter', text: '成為保母' },
@@ -40,21 +72,20 @@ export default function Header() {
     >
       <div className="container">
         <Link href="/" className="navbar-brand">
-          {/* 使用兩個 Image 元件配合 Bootstrap class 來實現響應式 Logo */}
           <Image
-            src="/layout/layout-header-logo.png" // 請確保圖片在 public 目錄下
+            src="/layout/layout-header-logo.png"
             alt="PetSitter Logo Desktop"
-            width={178} // 圖片實際寬度
-            height={48} // 圖片實際高度
-            className="d-none d-lg-block" // 只在 lg 及以上尺寸顯示
-            priority // Logo 通常是重要圖片，優先載入
+            width={178}
+            height={48}
+            className="d-none d-lg-block"
+            priority
           />
           <Image
             src="/layout/layout-header-logo-sm.png"
             alt="PetSitter Logo Mobile"
             width={140}
             height={40}
-            className="d-lg-none" // 在 lg 以下尺寸顯示
+            className="d-lg-none"
             priority
           />
         </Link>
@@ -62,22 +93,22 @@ export default function Header() {
         <button
           className="navbar-toggler border-0"
           type="button"
-          data-bs-toggle="offcanvas"
-          data-bs-target="#offcanvasNavbar"
+          onClick={toggleOffcanvas}
           aria-controls="offcanvasNavbar"
-          aria-label="Toggle navigation" // 增加 aria-label 以提升可訪問性
+          aria-label="Toggle navigation"
         >
           <span className="navbar-toggler-icon"></span>
         </button>
 
         <div
+          ref={offcanvasRef}
           className="offcanvas offcanvas-top"
           tabIndex="-1"
           id="offcanvasNavbar"
           aria-labelledby="offcanvasNavbarLabel"
         >
           <div className={`offcanvas-header p-4 ${styles.headerNavBgColor}`}>
-            <Link href="/" className="navbar-brand">
+            <Link href="/" className="navbar-brand" onClick={handleLinkClick}>
               <Image
                 src="/layout/layout-header-logo-sm.png"
                 alt="logo"
@@ -88,7 +119,7 @@ export default function Header() {
             <button
               type="button"
               className="btn-close text-reset"
-              data-bs-dismiss="offcanvas"
+              onClick={handleLinkClick}
               aria-label="Close"
             ></button>
           </div>
@@ -101,7 +132,11 @@ export default function Header() {
                   className={`nav-item my-9 my-lg-0 mx-lg-12 ${styles.navItem}`}
                   key={link.href}
                 >
-                  <Link href={link.href} className="nav-link link-gray-100">
+                  <Link
+                    href={link.href}
+                    className="nav-link link-gray-100"
+                    onClick={handleLinkClick}
+                  >
                     {link.text}
                   </Link>
                 </li>
@@ -112,7 +147,7 @@ export default function Header() {
               <Image
                 src="/layout/layout-header-woman.png"
                 alt="woman"
-                width={351} // 請根據圖片實際尺寸調整
+                width={351}
                 height={265}
                 className="d-lg-none d-block mt-auto"
                 style={{ objectFit: 'contain' }}
@@ -120,18 +155,21 @@ export default function Header() {
               <Link
                 href="/login"
                 className="d-lg-none btn btn-outline-primary w-100"
+                onClick={handleLinkClick}
               >
                 登入
               </Link>
               <Link
                 href="/login"
                 className="d-none d-lg-block flex-shrink-0 me-6"
+                onClick={handleLinkClick}
               >
                 登入
               </Link>
               <Link
                 href="/register"
                 className="btn btn-primary w-100 w-lg-auto text-white mb-4 mb-lg-0"
+                onClick={handleLinkClick}
               >
                 註冊
               </Link>
