@@ -8,6 +8,10 @@
   background: linear-gradient(90deg, #ffab82 0%, #f6844d 50%, #ffab82 100%);
 }
 
+.bg-gradient-secondary {
+    background: linear-gradient(123.31deg, #a9bd7e 0%, #c7d6a5 100%);
+  }
+
 @include media-breakpoint-up(md) {
   .dog-foot-title-md {
     position: relative;

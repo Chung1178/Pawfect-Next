@@ -1,0 +1,12 @@
+@import '../styles/bootstrap-essentials';
+
+.faqAccordionContainer {
+  :global(.accordion-item) {
+    background-color: transparent !important;
+  }
+}
+
+.accordionButtonCustom {
+  color: $gray-200;
+  transition: color 0.2s ease-in-out;
+}
