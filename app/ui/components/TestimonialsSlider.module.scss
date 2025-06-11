@@ -1,0 +1,50 @@
+@import '../styles/bootstrap-essentials';
+
+.testimonialsSection {
+  @include media-breakpoint-up(md) {
+    background-image: url('/bg-comment-1.png'), url('/bg-comment-2.png'),
+      url('/dog.png'), url('/bg-comment-3.png');
+    background-repeat: no-repeat;
+    background-position: left 68% top 0, left 0 bottom 0, left 45px bottom 0,
+      left 2px bottom 0;
+  }
+}
+
+.navButton {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  @include media-breakpoint-up(md) {
+    width: 64px;
+    height: 64px;
+  }
+}
+
+.swiperSlide {
+  width: 280px;
+  max-width: 80vw;
+  height: auto;
+  display: flex;
+
+  @include media-breakpoint-up(md) {
+    width: 416px;
+  }
+}
+
+.cardComment {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.cardBody {
+  flex-grow: 1;
+}
+
+.cardCorner {
+  position: absolute;
+  left: 2rem;
+  bottom: -1rem;
+}
