@@ -9,10 +9,10 @@ import {
   SERVICE_PROCESS_DATA,
 } from '@/app/lib/placeholder-data';
 
-import SitterSearchForm from './ui/components/SitterSearchForm';
 import TestimonialsSlider from './ui/components/TestimonialsSlider';
 import React from 'react';
 import FaqAccordion from './ui/components/FaqAccordion';
+import SitterSearch from './ui/components/SitterSearch';
 
 // 資料引入
 const servicesData = SERVICES_DATA;
@@ -42,14 +42,7 @@ export default function HomePage() {
                   我們用心為每一位毛孩提供無微不至的照顧服務，讓您的孩子在保母們的呵護下，感受到最真摯的關愛與溫暖
                 </p>
               </div>
-              <div className="position-absolute top-100 start-0 end-0 translate-middle-y px-4 z-2">
-                <div className="row justify-content-md-center">
-                  <div className="col-lg-10">
-                    {/* ✨ 使用拆分出去的 Client Component */}
-                    {/* <SitterSearchForm /> */}
-                  </div>
-                </div>
-              </div>
+              < SitterSearch />
             </div>
           </div>
         </section>

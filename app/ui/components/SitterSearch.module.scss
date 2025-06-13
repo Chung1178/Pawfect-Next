@@ -1,0 +1,81 @@
+@import '../styles/bootstrap-essentials';
+
+.sitterSearchForm {
+  border-radius: 16px;
+}
+// 服務類型選擇按鈕
+.typeSelectBtn {
+  color: $gray-500;
+  border-width: 0 0 3px 0;
+  border-style: solid;
+  border-color: transparent;
+  transition: color 0.2s ease, border-color 0.2s ease;
+
+  &:hover {
+    color: $primary;
+  }
+
+  &.active {
+    color: $primary;
+    border-bottom-color: $primary;
+  }
+}
+
+// 寵物數量選擇下拉選單
+.petNumDropdown {
+  // 如果需要特別的樣式，例如 dropdown-item 的 hover 背景色
+  :global(.dropdown-item) {
+    cursor: default; // 讓整個項目不可點擊跳轉，只有裡面的按鈕可點
+    &:hover,
+    &:focus {
+      background-color: transparent; // 移除預設的 hover/focus 背景色
+    }
+  }
+}
+
+.searchDropdownMenu {
+  max-height: 150px;
+  overflow-y: scroll;
+  // 如果需要特別的樣式，例如 dropdown-item 的 hover 背景色
+  :global(.dropdown-item) {
+    &:hover,
+    &:focus {
+      background-color: $primary; // 移除預設的 hover/focus 背景色
+      color: $light;
+    }
+  }
+}
+
+// 表單 input 內的 icon 樣式
+.inputIcon {
+  pointer-events: none; // 讓滑鼠可以穿透 icon 點擊到 input
+  z-index: 3;
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.datePickerInput {
+  &::placeholder {
+    color: $gray-300;
+    opacity: 1;
+  }
+
+  &::-ms-input-placeholder {
+    color: $gray-300;
+  }
+}
+
+:global(.react-datepicker-popper) {
+  z-index: 1070 !important; // 確保高於 Bootstrap modal 的 z-index (預設 1055)
+}
+
+.sitterSearchModal {
+  border-radius: 16px;
+  box-shadow: 0px 4px 40px 0px #f6844d3d;
+}
+
+// 搜尋時的 Spinner 背景
+.spinnerBg {
+  background-color: rgba(255, 255, 255, 0.7);
+  z-index: 9999;
+}
