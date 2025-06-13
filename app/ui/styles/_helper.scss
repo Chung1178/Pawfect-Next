@@ -12,6 +12,10 @@
     background: linear-gradient(123.31deg, #a9bd7e 0%, #c7d6a5 100%);
   }
 
+.shadow-primary {
+    box-shadow: 0px 4px 80px 0px #F6844D66;
+  }
+
 @include media-breakpoint-up(md) {
   .dog-foot-title-md {
     position: relative;
