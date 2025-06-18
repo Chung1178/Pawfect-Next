@@ -70,7 +70,7 @@ export default function Header() {
       }`}
       id="navbar"
     >
-      <div className="container">
+      <div className={`${styles.headerContainer} container`}>
         <Link href="/" className="navbar-brand">
           <Image
             src="/layout/layout-header-logo.png"

@@ -20,8 +20,10 @@
   }
 }
 
-@include media-breakpoint-down(lg) {
-  :global(.offcanvas-top) {
-    height: 100vh !important;
+.headerContainer{
+  @include media-breakpoint-down(lg) {
+    :global(.offcanvas-top) {
+      height: 100vh !important;
+    }
   }
 }

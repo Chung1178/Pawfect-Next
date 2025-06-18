@@ -251,7 +251,7 @@ export default function SearchFormFields({
           </div>
           <div className={`${isModal ? 'col-12' : 'col'}`}>
             <label className="text-gray-500 mb-2 small d-block">照顧期間</label>
-            <div className="position-relative">
+            <div className={`position-relative ${styles.datePickerContainer}`}>
               {!hasDateValue && (
                 <CalendarDaysIcon
                   className={`position-absolute top-50 translate-middle-y ms-5 text-gray-500 ${styles.inputIcon}`}

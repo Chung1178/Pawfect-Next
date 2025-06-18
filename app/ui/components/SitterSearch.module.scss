@@ -65,8 +65,10 @@
   }
 }
 
-:global(.react-datepicker-popper) {
-  z-index: 1070 !important; // 確保高於 Bootstrap modal 的 z-index (預設 1055)
+.datePickerContainer{
+  :global(.react-datepicker-popper) {
+    z-index: 1070 !important; // 確保高於 Bootstrap modal 的 z-index (預設 1055)
+  }
 }
 
 .sitterSearchModal {
