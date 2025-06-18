@@ -10,6 +10,7 @@ import SitterSearch from '@/app/ui/components/SitterSearch';
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
 
 const ITEMS_PER_PAGE = 8;
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
 const filterSitters = (sitters, queryParams) => {
   const service = queryParams.get('service');
@@ -108,7 +109,7 @@ export default function SittersPage() {
       // 總是獲取所有 role=sitter 的使用者
       apiQuery.set('role', 'sitter');
 
-      const url = `http://localhost:3001/users?${apiQuery.toString()}`;
+      const url = `${API_BASE_URL}users?${apiQuery.toString()}`;
 
       const res = await fetch(url);
       if (!res.ok) throw new Error('資料獲取失敗');

@@ -4,9 +4,11 @@ import style from '@/app/ui/pages/sitters-page.module.scss';
 import { StarIcon } from '@heroicons/react/16/solid';
 import React from 'react';
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+
 export default async function SitterPage({ params }) {
   const { sitterId } = await params;
-  const res = await fetch(`http://localhost:3001/users/${sitterId}`);
+  const res = await fetch(`${API_BASE_URL}users/${sitterId}`);
   const data = await res.json();
   const {
     id,
