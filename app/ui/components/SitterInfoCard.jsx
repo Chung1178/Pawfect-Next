@@ -1,3 +1,4 @@
+import SitterBookingButton from './SitterBookingButton';
 import style from './SitterInfoCard.module.scss';
 
 import { StarIcon, MapPinIcon, UserIcon } from '@heroicons/react/16/solid';
@@ -11,9 +12,8 @@ export default function SitterInfoCard({
   bio,
   totalBookingsCompleted,
   profilePictureUrl,
+  servicesOffered = []
 }) {
-  const modalId = `bookingModal-${id}`;
-
   return (
     <>
       <div className={`${style.sitterDetailCard} card bg-light border-0`}>
@@ -56,14 +56,11 @@ export default function SitterInfoCard({
             <span className="d-block mb-2 text-center text-gray-500 small">
               在過去的48小時內，已經收到了十筆預約。
             </span>
-            <button
-              type="button"
-              className="btn btn-primary w-100 booking-primary-btn text-light"
-              data-bs-toggle="modal"
-              data-bs-target={`#${modalId}`} // ✨ 觸發 Modal
-            >
-              立即預約
-            </button>
+            <SitterBookingButton
+              sitterId={id}
+              sitterName={name}
+              services={servicesOffered}
+            />
           </div>
         </div>
       </div>

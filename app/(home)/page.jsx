@@ -9,10 +9,10 @@ import {
   SERVICE_PROCESS_DATA,
 } from '@/app/lib/placeholder-data';
 
-import TestimonialsSlider from './ui/components/TestimonialsSlider';
+import TestimonialsSlider from '../ui/components/TestimonialsSlider';
 import React from 'react';
-import FaqAccordion from './ui/components/FaqAccordion';
-import SitterSearch from './ui/components/SitterSearch';
+import FaqAccordion from '../ui/components/FaqAccordion';
+import SitterSearch from '../ui/components/SitterSearch';
 
 // 資料引入
 const servicesData = SERVICES_DATA;

@@ -6,9 +6,11 @@
 
 .footerLogo {
   width: 140px;
+  height: auto;
 
   @include media-breakpoint-up(md) {
     width: 178px;
+    height: auto;
   }
 }
 
