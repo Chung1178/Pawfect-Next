@@ -80,3 +80,9 @@ export const SERVICE_PROCESS_DATA = [
     colorClass: 'text-thirdly-100', 
   },
 ];
+
+export const SERVICE_TIME_SLOTS_DATA = [
+    { value: 'morning', label: '上午 (09:00 - 12:00)' },
+    { value: 'afternoon', label: '下午 (13:00 - 18:00)' },
+    { value: 'evening', label: '傍晚 (18:00 - 21:00)' },
+  ];

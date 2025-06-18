@@ -2,6 +2,7 @@ import SitterImageGallery from '@/app/ui/components/SitterImageGallery';
 import SitterInfoCard from '@/app/ui/components/SitterInfoCard';
 import style from '@/app/ui/pages/sitters-page.module.scss';
 import { StarIcon } from '@heroicons/react/16/solid';
+import React from 'react';
 
 export default async function SitterPage({ params }) {
   const { sitterId } = await params;
@@ -137,6 +138,7 @@ export default async function SitterPage({ params }) {
                     bio={bio}
                     totalBookingsCompleted={totalBookingsCompleted}
                     profilePictureUrl={profilePictureUrl}
+                    servicesOffered={servicesOffered}
                   />
                 </div>
                 {/* 服務列表 */}
@@ -147,9 +149,9 @@ export default async function SitterPage({ params }) {
                   {servicesOffered.map((service) => {
                     const serviceStyle = getServiceStyles(service.name);
                     return (
+                      <React.Fragment key={service.serviceId}>
                       <div
                         className={`${style.sitterServiceCard} card border-0 mb-4 mb-lg-5`}
-                        key={service.id}
                       >
                         <div className="card-body p-0 d-flex align-items-center justify-content-between">
                           <div className="d-flex align-items-center">
@@ -175,6 +177,7 @@ export default async function SitterPage({ params }) {
                           </span>
                         </div>
                       </div>
+                      </React.Fragment>
                     );
                   })}
                 </div>
@@ -260,6 +263,7 @@ export default async function SitterPage({ params }) {
                     bio={bio}
                     totalBookingsCompleted={totalBookingsCompleted}
                     profilePictureUrl={profilePictureUrl}
+                    servicesOffered={servicesOffered}
                   />
                 </div>
               </div>
