@@ -101,12 +101,12 @@ export default function SittersPage() {
     try {
       const queryParams = new URLSearchParams(currentQuery);
 
-      // ✨ 只用 json-server 支援的參數去後端預篩選
+      //用 json-server 支援的參數去後端預篩選
       const apiQuery = new URLSearchParams();
       if (queryParams.get('address')) {
         apiQuery.set('address.city', queryParams.get('address'));
       }
-      // 總是獲取所有 role=sitter 的使用者
+      //總是獲取所有 role=sitter 的使用者
       apiQuery.set('role', 'sitter');
 
       const url = `${API_BASE_URL}users?${apiQuery.toString()}`;
@@ -117,7 +117,7 @@ export default function SittersPage() {
       const data = await res.json();
       setAllSitters(data);
 
-      // ✨ 在前端進行精細篩選
+      //在前端進行精細篩選
       const finalFilteredData = filterSitters(data, queryParams);
       setFilteredSitters(finalFilteredData);
     } catch (err) {
@@ -128,7 +128,6 @@ export default function SittersPage() {
     }
   }, []);
 
-  // ✨ 主 useEffect，負責在 searchParams 或 currentPage 改變時獲取資料
   useEffect(() => {
     const initialQuery = searchParams.toString();
     setCurrentPage(1); // 每次新搜尋都重置頁碼
@@ -146,7 +145,7 @@ export default function SittersPage() {
     currentPage * ITEMS_PER_PAGE
   );
 
-  // ✨ 處理分頁變更的函式
+  // 處理分頁變更的函式
   const handlePageChange = (page) => {
     if (page < 1 || page > totalPages) return; // 防止超出頁碼範圍
     setCurrentPage(page);
@@ -200,7 +199,7 @@ export default function SittersPage() {
                 >
                   <span className="me-11 me-lg-31 text-gray-300">排序方式</span>
                   <ChevronDownIcon
-                    className='text-gray-500'
+                    className="text-gray-500"
                     style={{ width: '1.25rem', height: '1.25rem' }}
                   />
                 </button>
@@ -331,7 +330,7 @@ export default function SittersPage() {
               </p>
             )}
 
-            {/* ✨ 渲染分頁元件 */}
+            {/* 渲染分頁元件 */}
             {totalPages > 1 && renderPagination()}
           </div>
         </section>

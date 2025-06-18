@@ -194,7 +194,9 @@ export default function SearchFormFields({
                   style={{ width: '1.25rem', height: '1.25rem' }}
                 />
               </button>
-              <ul className={`${styles.searchDropdownMenu} dropdown-menu w-100`}>
+              <ul
+                className={`${styles.searchDropdownMenu} dropdown-menu w-100`}
+              >
                 {petTypeOptions.map((opt) => (
                   <li key={opt.value}>
                     <button

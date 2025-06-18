@@ -1,10 +1,10 @@
-@import "../styles/bootstrap-essentials";
+@import '../styles/bootstrap-essentials';
 
-.sitterDetailCard{
+.sitterDetailCard {
   height: 100%;
-  box-shadow: 0px 4px 40px 0px #F6844D1F;
+  box-shadow: 0px 4px 40px 0px #f6844d1f;
   border-radius: 24px;
-  @include media-breakpoint-up(lg){
+  @include media-breakpoint-up(lg) {
     min-height: 481px;
   }
 }

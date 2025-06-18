@@ -28,7 +28,7 @@ export default function Header() {
 
   useEffect(() => {
     const offcanvasElement = offcanvasRef.current;
-    let bsOffcanvas; 
+    let bsOffcanvas;
 
     if (offcanvasElement) {
       bsOffcanvas = new Offcanvas(offcanvasElement, {

@@ -3,10 +3,8 @@
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Thumbs, Navigation, FreeMode } from 'swiper/modules';
 
-// Heroicons for navigation arrows
 import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/24/solid';
 
-// Swiper CSS
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/thumbs';

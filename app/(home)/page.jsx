@@ -42,7 +42,7 @@ export default function HomePage() {
                   我們用心為每一位毛孩提供無微不至的照顧服務，讓您的孩子在保母們的呵護下，感受到最真摯的關愛與溫暖
                 </p>
               </div>
-              < SitterSearch />
+              <SitterSearch />
             </div>
           </div>
         </section>

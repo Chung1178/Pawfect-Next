@@ -152,33 +152,33 @@ export default async function SitterPage({ params }) {
                     const serviceStyle = getServiceStyles(service.name);
                     return (
                       <React.Fragment key={service.serviceId}>
-                      <div
-                        className={`${style.sitterServiceCard} card border-0 mb-4 mb-lg-5`}
-                      >
-                        <div className="card-body p-0 d-flex align-items-center justify-content-between">
-                          <div className="d-flex align-items-center">
-                            <img
-                              src={serviceStyle.icon}
-                              alt={service.name}
-                              style={{ width: '48px', height: '48px' }}
-                              className="me-4"
-                            />
-                            <span
-                              className={`fw-bold fs-7 ${serviceStyle.colorClass}`}
-                            >
-                              {service.name}
+                        <div
+                          className={`${style.sitterServiceCard} card border-0 mb-4 mb-lg-5`}
+                        >
+                          <div className="card-body p-0 d-flex align-items-center justify-content-between">
+                            <div className="d-flex align-items-center">
+                              <img
+                                src={serviceStyle.icon}
+                                alt={service.name}
+                                style={{ width: '48px', height: '48px' }}
+                                className="me-4"
+                              />
+                              <span
+                                className={`fw-bold fs-7 ${serviceStyle.colorClass}`}
+                              >
+                                {service.name}
+                              </span>
+                            </div>
+                            <span>
+                              <strong className="fw-bold fs-7 text-gray-200">
+                                NT ${service.price}
+                              </strong>
+                              <span className="fs-11 text-gray-500 ms-1">
+                                {service.unit}
+                              </span>
                             </span>
                           </div>
-                          <span>
-                            <strong className="fw-bold fs-7 text-gray-200">
-                              NT ${service.price}
-                            </strong>
-                            <span className="fs-11 text-gray-500 ms-1">
-                              {service.unit}
-                            </span>
-                          </span>
                         </div>
-                      </div>
                       </React.Fragment>
                     );
                   })}

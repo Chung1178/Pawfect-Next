@@ -91,12 +91,7 @@ export default function SitterSearch({ onSearch }) {
       </div>
 
       {/* Mobile Modal */}
-      <div
-        ref={modalRef}
-        className={`modal fade`}
-        id={modalId}
-        tabIndex="-1"
-      >
+      <div ref={modalRef} className={`modal fade`} id={modalId} tabIndex="-1">
         <div className="modal-dialog modal-dialog-centered">
           <div className={`modal-content ${styles.sitterSearchModal}`}>
             <div className="modal-body pt-0 px-7 pb-9">
