@@ -4,11 +4,12 @@ import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import styles from './Header.module.scss';
-import { Offcanvas } from 'bootstrap';
+// import { Offcanvas } from 'bootstrap';
 
 export default function Header() {
   const [hasScrolled, setHasScrolled] = useState(false);
   const offcanvasRef = useRef(null);
+  const offcanvasInstanceRef = useRef(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -27,33 +28,41 @@ export default function Header() {
   }, []);
 
   useEffect(() => {
-    const offcanvasElement = offcanvasRef.current;
-    let bsOffcanvas;
-
-    if (offcanvasElement) {
-      bsOffcanvas = new Offcanvas(offcanvasElement, {
+     const loadBootstrap = async () => {
+      if (typeof window !== 'undefined') {
+        const { Offcanvas } = await import('bootstrap')
+        offcanvasInstanceRef.current = new Offcanvas(offcanvasRef.current, {
         backdrop: false,
-      });
+      })
+      }
     }
+    
+    loadBootstrap()
+    // const offcanvasElement = offcanvasRef.current;
+    // let bsOffcanvas; 
+
+    // if (offcanvasElement) {
+    //   bsOffcanvas = new Offcanvas(offcanvasElement, {
+    //     backdrop: false,
+    //   });
+    // }
 
     return () => {
-      if (bsOffcanvas && typeof bsOffcanvas.dispose === 'function') {
-        bsOffcanvas.dispose();
+      if (offcanvasInstanceRef.current && typeof offcanvasInstanceRef.current.dispose === 'function') {
+        offcanvasInstanceRef.current.dispose();
       }
     };
   }, []);
 
   const handleLinkClick = () => {
-    const offcanvasInstance = Offcanvas.getInstance(offcanvasRef.current);
-    if (offcanvasInstance) {
-      offcanvasInstance.hide();
+    if (offcanvasInstanceRef.current) {
+      offcanvasInstanceRef.current.hide();
     }
   };
 
   const toggleOffcanvas = () => {
-    const offcanvasInstance = Offcanvas.getInstance(offcanvasRef.current);
-    if (offcanvasInstance) {
-      offcanvasInstance.toggle();
+    if (offcanvasInstanceRef.current) {
+      offcanvasInstanceRef.current.toggle();
     }
   };
 
