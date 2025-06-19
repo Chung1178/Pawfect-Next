@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef, Suspense, useMemo } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { Modal } from 'bootstrap';
+// import { Modal } from 'bootstrap';
 
 import { CheckCircleIcon } from '@heroicons/react/24/outline';
 
@@ -24,31 +24,46 @@ function BookingContent() {
 
   const confirmModalRef = useRef(null);
   const successModalRef = useRef(null);
+  const confirmModalInstanceRef = useRef(null);
+  const successModalInstanceRef = useRef(null);
 
   useEffect(() => {
     const confirmModalEl = confirmModalRef.current;
     const successModalEl = successModalRef.current;
 
-    const confirmModalInstance = confirmModalEl
-      ? new Modal(confirmModalEl)
-      : null;
-    const successModalInstance = successModalEl
-      ? new Modal(successModalEl, { backdrop: 'static', keyboard: false })
-      : null;
+    const loadBootstrap = async () => {
+      if (typeof window !== 'undefined') {
+        const { Modal } = await import('bootstrap');
+        confirmModalInstanceRef.current = new Modal(confirmModalEl);
+        successModalInstanceRef.current = new Modal(successModalEl, {
+          backdrop: 'static',
+          keyboard: false,
+        });
+      }
+    };
+
+    loadBootstrap();
+
+    // const confirmModalInstance = confirmModalEl
+    //   ? new Modal(confirmModalEl)
+    //   : null;
+    // const successModalInstance = successModalEl
+    //   ? new Modal(successModalEl, { backdrop: 'static', keyboard: false })
+    //   : null;
 
     return () => {
-      confirmModalInstance?.dispose();
-      successModalInstance?.dispose();
+      confirmModalInstanceRef.current?.dispose();
+      successModalInstanceRef.current?.dispose();
     };
   }, []);
 
   const showConfirmModal = () =>
-    Modal.getInstance(confirmModalRef.current)?.show();
+    confirmModalInstanceRef.current?.show();
   const hideConfirmModal = () =>
-    Modal.getInstance(confirmModalRef.current)?.hide();
+    confirmModalInstanceRef.current?.hide();
 
   const showSuccessModal = () =>
-    Modal.getInstance(successModalRef.current)?.show();
+    successModalInstanceRef.current?.show();
 
   //從 URL 讀取訂單資訊並進行計算
   const orderDetails = useMemo(() => {
@@ -154,7 +169,7 @@ function BookingContent() {
     successModalElement.addEventListener('hidden.bs.modal', onModalHidden, {
       once: true,
     });
-    Modal.getInstance(successModalElement)?.hide();
+    successModalInstanceRef.current?.hide();
   };
 
   // --- 動態生成選項 ---
