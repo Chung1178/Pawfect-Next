@@ -1,6 +1,5 @@
 'use client';
 
-// import { Modal } from 'bootstrap';
 import { useEffect, useRef, useState } from 'react';
 import styles from '../pages/sitters-page.module.scss';
 
@@ -27,10 +26,6 @@ export default function SitterBookingButton({
 
   const [isClient, setIsClient] = useState(false);
 
-  // useEffect(() => {
-  //   setIsClient(true);
-  // }, []);
-
   // 表單狀態
   const [selectedDateRange, setSelectedDateRange] = useState([null, null]);
   const [selectedTimeSlot, setSelectedTimeSlot] = useState('');
@@ -45,18 +40,20 @@ export default function SitterBookingButton({
 
     const loadBootstrap = async () => {
       if (typeof window !== 'undefined') {
-        const { Modal } = await import('bootstrap')
-        bookingModal.current = new Modal(modalRef.current, { backdrop: 'static' });
+        const { Modal } = await import('bootstrap');
+        bookingModal.current = new Modal(modalRef.current, {
+          backdrop: 'static',
+        });
       }
-    }
-    
-    loadBootstrap()
+    };
+
+    loadBootstrap();
 
     return () => {
       if (bookingModal.current) {
-        bookingModal.current.dispose()
+        bookingModal.current.dispose();
       }
-    }
+    };
   }, []);
 
   const openModal = () => {

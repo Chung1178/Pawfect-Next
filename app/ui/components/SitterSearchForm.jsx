@@ -13,7 +13,6 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { registerLocale } from 'react-datepicker';
 import { zhTW } from 'date-fns/locale/zh-TW';
 
-// import { Dropdown } from 'bootstrap';
 import styles from './SitterSearch.module.scss';
 
 registerLocale('zh-TW', zhTW);
@@ -108,14 +107,7 @@ export default function SearchFormFields({
     };
 
     loadBootstrap();
-    // 建立實例
-    // petDropdownInstance.current = new Dropdown(petDropdownRef.current, {
-    //   autoClose: 'outside',
-    //   boundary: 'clippingParents',
-    // });
-    // areaDropdownInstance.current = new Dropdown(areaDropdownRef.current);
 
-    // 返回 cleanup 函式來銷毀實例
     return () => {
       if (petDropdownInstance.current) petDropdownInstance.current.dispose();
       if (areaDropdownInstance.current) areaDropdownInstance.current.dispose();

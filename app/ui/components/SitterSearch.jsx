@@ -5,7 +5,6 @@ import { useRouter, usePathname } from 'next/navigation';
 
 import SitterSearchForm from '@/app/ui/components/SitterSearchForm';
 
-// import { Modal } from 'bootstrap';
 import styles from './SitterSearch.module.scss';
 
 export default function SitterSearch({ onSearch }) {
@@ -26,48 +25,28 @@ export default function SitterSearch({ onSearch }) {
     // 動態載入 Bootstrap JavaScript
     const loadBootstrap = async () => {
       if (typeof window !== 'undefined') {
-        const { Modal } = await import('bootstrap')
-        searchModal.current = new Modal(modalRef.current)
+        const { Modal } = await import('bootstrap');
+        searchModal.current = new Modal(modalRef.current);
       }
-    }
-    
-    loadBootstrap()
+    };
+
+    loadBootstrap();
 
     // 清理函數
     return () => {
       if (searchModal.current) {
-        searchModal.current.dispose()
+        searchModal.current.dispose();
       }
-    }
-  }, [])
-
-  // useEffect(() => {
-  //   if (!isClient) return;
-
-  //   searchModal.current = new Modal(modalRef.current);
-  // }, [isClient]);
-  // const getModalInstance = () => {
-  //   const modalElement = modalRef.current;
-  //   if (modalElement && window.bootstrap) {
-  //     // getOrCreateInstance 會返回現有實例，或在需要時創建一個新的
-  //     return Modal.getOrCreateInstance(modalElement);
-  //   }
-  //   return null;
-  // };
+    };
+  }, []);
 
   const showModal = () => {
     searchModal.current.show();
   };
-  // const showModal = () => {
-  //   getModalInstance()?.show();
-  // };
 
   const hideModal = () => {
     searchModal.current.hide();
   };
-  // const hideModal = () => {
-  //   getModalInstance()?.hide();
-  // };
 
   const handleSearchSubmit = (searchParams) => {
     hideModal();

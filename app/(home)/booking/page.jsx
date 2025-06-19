@@ -3,7 +3,6 @@
 import React, { useState, useEffect, useRef, Suspense, useMemo } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
-// import { Modal } from 'bootstrap';
 
 import { CheckCircleIcon } from '@heroicons/react/24/outline';
 
@@ -44,26 +43,16 @@ function BookingContent() {
 
     loadBootstrap();
 
-    // const confirmModalInstance = confirmModalEl
-    //   ? new Modal(confirmModalEl)
-    //   : null;
-    // const successModalInstance = successModalEl
-    //   ? new Modal(successModalEl, { backdrop: 'static', keyboard: false })
-    //   : null;
-
     return () => {
       confirmModalInstanceRef.current?.dispose();
       successModalInstanceRef.current?.dispose();
     };
   }, []);
 
-  const showConfirmModal = () =>
-    confirmModalInstanceRef.current?.show();
-  const hideConfirmModal = () =>
-    confirmModalInstanceRef.current?.hide();
+  const showConfirmModal = () => confirmModalInstanceRef.current?.show();
+  const hideConfirmModal = () => confirmModalInstanceRef.current?.hide();
 
-  const showSuccessModal = () =>
-    successModalInstanceRef.current?.show();
+  const showSuccessModal = () => successModalInstanceRef.current?.show();
 
   //從 URL 讀取訂單資訊並進行計算
   const orderDetails = useMemo(() => {
