@@ -20,12 +20,10 @@
   }
 }
 
-@include media-breakpoint-down(lg) {
-  // 針對 Bootstrap 的 .offcanvas-top class
-  // 如果這段 SCSS 是在 Header.module.scss 中，
-  // 並且 offcanvas 的 DOM 結構不在 Header 組件的根元素內，
-  // 可能需要使用 :global() 來確保能選取到全域的 Bootstrap class。
-  :global(.offcanvas-top) {
-    height: 100vh !important;
+.headerContainer{
+  @include media-breakpoint-down(lg) {
+    :global(.offcanvas-top) {
+      height: 100vh !important;
+    }
   }
 }

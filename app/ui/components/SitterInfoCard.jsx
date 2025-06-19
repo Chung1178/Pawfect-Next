@@ -12,7 +12,7 @@ export default function SitterInfoCard({
   bio,
   totalBookingsCompleted,
   profilePictureUrl,
-  servicesOffered = []
+  servicesOffered = [],
 }) {
   return (
     <>

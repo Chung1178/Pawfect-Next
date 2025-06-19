@@ -1,4 +1,3 @@
-// app/components/search/SitterSearch.jsx
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
@@ -14,7 +13,6 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { registerLocale } from 'react-datepicker';
 import { zhTW } from 'date-fns/locale/zh-TW';
 
-import { Dropdown } from 'bootstrap';
 import styles from './SitterSearch.module.scss';
 
 registerLocale('zh-TW', zhTW);
@@ -97,14 +95,19 @@ export default function SearchFormFields({
   const areaDropdownInstance = useRef(null);
 
   useEffect(() => {
-    // 建立實例
-    petDropdownInstance.current = new Dropdown(petDropdownRef.current, {
-      autoClose: 'outside',
-      boundary: 'clippingParents',
-    });
-    areaDropdownInstance.current = new Dropdown(areaDropdownRef.current);
+    const loadBootstrap = async () => {
+      if (typeof window !== 'undefined') {
+        const { Dropdown } = await import('bootstrap');
+        petDropdownInstance.current = new Dropdown(petDropdownRef.current, {
+          autoClose: 'outside',
+          boundary: 'clippingParents',
+        });
+        areaDropdownInstance.current = new Dropdown(areaDropdownRef.current);
+      }
+    };
 
-    // 返回 cleanup 函式來銷毀實例
+    loadBootstrap();
+
     return () => {
       if (petDropdownInstance.current) petDropdownInstance.current.dispose();
       if (areaDropdownInstance.current) areaDropdownInstance.current.dispose();
@@ -194,7 +197,9 @@ export default function SearchFormFields({
                   style={{ width: '1.25rem', height: '1.25rem' }}
                 />
               </button>
-              <ul className={`${styles.searchDropdownMenu} dropdown-menu w-100`}>
+              <ul
+                className={`${styles.searchDropdownMenu} dropdown-menu w-100`}
+              >
                 {petTypeOptions.map((opt) => (
                   <li key={opt.value}>
                     <button
@@ -249,7 +254,7 @@ export default function SearchFormFields({
           </div>
           <div className={`${isModal ? 'col-12' : 'col'}`}>
             <label className="text-gray-500 mb-2 small d-block">照顧期間</label>
-            <div className="position-relative">
+            <div className={`position-relative ${styles.datePickerContainer}`}>
               {!hasDateValue && (
                 <CalendarDaysIcon
                   className={`position-absolute top-50 translate-middle-y ms-5 text-gray-500 ${styles.inputIcon}`}

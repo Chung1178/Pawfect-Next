@@ -1,11 +1,10 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 
 import SitterSearchForm from '@/app/ui/components/SitterSearchForm';
 
-import { Modal } from 'bootstrap';
 import styles from './SitterSearch.module.scss';
 
 export default function SitterSearch({ onSearch }) {
@@ -13,12 +12,32 @@ export default function SitterSearch({ onSearch }) {
   const pathname = usePathname();
   const isListPage = pathname.startsWith('/sitters');
   const modalId = 'sitter-search-modal';
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const modalRef = useRef(null);
   const searchModal = useRef(null);
 
   useEffect(() => {
-    searchModal.current = new Modal(modalRef.current);
+    // 動態載入 Bootstrap JavaScript
+    const loadBootstrap = async () => {
+      if (typeof window !== 'undefined') {
+        const { Modal } = await import('bootstrap');
+        searchModal.current = new Modal(modalRef.current);
+      }
+    };
+
+    loadBootstrap();
+
+    // 清理函數
+    return () => {
+      if (searchModal.current) {
+        searchModal.current.dispose();
+      }
+    };
   }, []);
 
   const showModal = () => {
@@ -91,12 +110,7 @@ export default function SitterSearch({ onSearch }) {
       </div>
 
       {/* Mobile Modal */}
-      <div
-        ref={modalRef}
-        className={`modal fade`}
-        id={modalId}
-        tabIndex="-1"
-      >
+      <div ref={modalRef} className={`modal fade`} id={modalId} tabIndex="-1">
         <div className="modal-dialog modal-dialog-centered">
           <div className={`modal-content ${styles.sitterSearchModal}`}>
             <div className="modal-body pt-0 px-7 pb-9">

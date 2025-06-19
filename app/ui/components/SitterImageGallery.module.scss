@@ -13,14 +13,14 @@
 
 // 縮圖幻燈片樣式
 .thumbSlide {
-  border: 2px solid transparent; // 預留邊框位置
+  border: 2px solid transparent;
   border-radius: 16px;
   cursor: pointer;
   overflow: hidden;
   width: 64px !important;
   height: 64px !important;
-  transition: all 0.3s ease; // 添加過渡效果
-  opacity: 0.7; // 預設透明度
+  transition: all 0.3s ease;
+  opacity: 0.7;
   @include media-breakpoint-up(lg) {
     width: 88px !important;
     height: 88px !important;

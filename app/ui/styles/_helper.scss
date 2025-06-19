@@ -1,4 +1,4 @@
-@import "./bootstrap-essentials";
+@import './bootstrap-essentials';
 
 .bg-gradient-light {
   background: linear-gradient(90deg, #fff7f0 0%, #ffffff 50%, #fff7f0 100%);
@@ -9,12 +9,12 @@
 }
 
 .bg-gradient-secondary {
-    background: linear-gradient(123.31deg, #a9bd7e 0%, #c7d6a5 100%);
-  }
+  background: linear-gradient(123.31deg, #a9bd7e 0%, #c7d6a5 100%);
+}
 
 .shadow-primary {
-    box-shadow: 0px 4px 80px 0px #F6844D66;
-  }
+  box-shadow: 0px 4px 80px 0px #f6844d66;
+}
 
 @include media-breakpoint-up(md) {
   .dog-foot-title-md {
