@@ -1,0 +1,78 @@
+@import '../styles/bootstrap-essentials';
+
+.searchBanner {
+  background-image: url('/search-page/banner-top-circle-sm.svg'),
+    url('/search-page/banner-top-line-sm.svg'),
+    url('/search-page/banner-bottom-circle-sm.svg'),
+    url('/search-page/banner-bottom-line-sm.svg');
+  background-repeat: no-repeat;
+  background-position: top right, top right, left bottom, left bottom;
+
+  @include media-breakpoint-up(lg) {
+    background-image: url('/search-page/banner-top-circle-md.svg'),
+      url('/search-page/banner-top-line-md.svg'),
+      url('/search-page/banner-bottom-circle-md.svg'),
+      url('/search-page/banner-bottom-line-md.svg');
+    background-position: top right 6%, top 28% right 6%, bottom left 6%,
+      bottom left 6%;
+    background-repeat: no-repeat;
+  }
+}
+
+.sitter-detail-banner {
+  top: 64px;
+  height: 535px;
+  background: linear-gradient(90deg, #ffab82 0%, #f6844d 50%, #ffab82 100%);
+
+  @include media-breakpoint-up(lg) {
+    top: 80px;
+    height: 340px;
+    background: url('/booking-page/背景下方圓圈.svg') bottom right no-repeat,
+      url('/booking-page/背景上方圓圈.svg') top left no-repeat,
+      linear-gradient(90deg, #ffab82 0%, #f6844d 50%, #ffab82 100%);
+  }
+}
+
+.sitterCardImage {
+  width: 100%;
+  height: 198px;
+  border-radius: 24px;
+  @include media-breakpoint-up(lg) {
+    width: 306px;
+    height: 172px;
+  }
+}
+
+.sitterServiceCard,
+.sitterCommentCard {
+  box-shadow: 0px 4px 40px 0px #f6844d1f;
+  padding: 24px;
+  border-radius: 16px;
+}
+
+.bookingModalDialog {
+  width: 360px;
+  max-width: 100%;
+  .bookingModalContent {
+    border-radius: 24px;
+    select {
+      appearance: none;
+      background: url('/booking-page/chevronDownIcon.svg') no-repeat right 16px
+        center;
+    }
+  }
+}
+
+.datePickerInput {
+  &::placeholder {
+    color: $gray-300;
+    opacity: 1;
+  }
+}
+
+.inputIcon {
+  pointer-events: none;
+  z-index: 3;
+  width: 1.25rem;
+  height: 1.25rem;
+}

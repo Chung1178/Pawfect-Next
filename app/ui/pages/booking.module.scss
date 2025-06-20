@@ -1,0 +1,53 @@
+// app/booking/confirm/booking-confirmation.module.scss
+@import '../styles/bootstrap-essentials';
+
+.orderSummary {
+  background: linear-gradient(90deg, #fff7f0 0%, #ffffff 50%, #fff7f0 100%);
+
+  :global(.card) {
+    // 對此頁面內的 card 進行統一設定
+    border-radius: 1.5rem;
+    background-color: var(--bs-light);
+    border: none !important;
+    box-shadow: 0px 4px 40px 0px rgba(246, 132, 77, 0.12);
+  }
+}
+
+.paymentTypeSelect {
+  label {
+    color: $gray-200;
+  }
+}
+
+.paymentTypeSelect:hover {
+  label {
+    color: $primary;
+  }
+  // 對 input 的 hover 效果可能需要更精確的選擇器
+  :global(input.form-check-input) {
+    border-color: $primary;
+  }
+}
+
+.paymentTypeContent {
+  label {
+    color: $gray-500;
+  }
+  // 使用 :global 精準選取 Bootstrap class
+  :global(select.form-select),
+  :global(input.form-control) {
+    background-color: $gray-1000;
+    border: none;
+  }
+  // 全域設定 placeholder 顏色
+  ::placeholder {
+    color: $gray-300;
+  }
+}
+
+.modalContent {
+  // 自訂 modal 內容的寬度
+  max-width: 360px;
+  margin: auto;
+  border-radius: 1.5rem;
+}

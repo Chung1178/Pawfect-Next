@@ -1,7 +1,7 @@
-@use "~bootstrap/scss/functions";
-@use "./variables";
-@use "~bootstrap";
+@import "~bootstrap/scss/functions";
+@import "./variables";
+@import "~bootstrap/scss/bootstrap";
 
-@use "./utilities";
+@import "./utilities";
 
-@use "~bootstrap/scss/utilities/api";
+@import "~bootstrap/scss/utilities/api";

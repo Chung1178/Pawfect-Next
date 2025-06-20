@@ -1,0 +1,29 @@
+@import '../styles/bootstrap-essentials';
+
+.headerNavBgColor {
+  background-color: $primary-400;
+
+  @include media-breakpoint-up(lg) {
+    background-color: #fff;
+  }
+}
+
+.navbarShadow {
+  box-shadow: 0px 4px 80px 0px rgba(246, 132, 77, 0.2);
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.navItem {
+  &:hover {
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
+  }
+}
+
+.headerContainer{
+  @include media-breakpoint-down(lg) {
+    :global(.offcanvas-top) {
+      height: 100vh !important;
+    }
+  }
+}
