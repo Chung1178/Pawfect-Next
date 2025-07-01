@@ -4,8 +4,10 @@ import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import styles from './Header.module.scss';
+import { useTooltip } from '@/app/hooks/useBootstrap';
 
 export default function Header() {
+  useTooltip();
   const [hasScrolled, setHasScrolled] = useState(false);
   const offcanvasRef = useRef(null);
   const offcanvasInstanceRef = useRef(null);
@@ -62,7 +64,7 @@ export default function Header() {
 
   const navLinks = [
     { href: '/sitters', text: '搜尋保母' },
-    { href: '/become-a-sitter', text: '成為保母' },
+    { href: '/become-a-sitter', text: '成為保母', disabled: true },
     { href: '/#index-qna', text: '常見問題' },
   ];
 
@@ -135,13 +137,33 @@ export default function Header() {
                   className={`nav-item my-9 my-lg-0 mx-lg-12 ${styles.navItem}`}
                   key={link.href}
                 >
-                  <Link
-                    href={link.href}
-                    className="nav-link link-gray-100"
-                    onClick={handleLinkClick}
-                  >
-                    {link.text}
-                  </Link>
+                  {link.disabled ? (
+                    <span
+                      className="d-inline-block"
+                      tabIndex="0"
+                      data-bs-toggle="tooltip"
+                      data-bs-placement="bottom"
+                      title="功能即將上線，敬請期待！"
+                    >
+                      <Link
+                        href="#"
+                        className="nav-link link-gray-100 disabled"
+                        tabIndex="-1"
+                        aria-disabled="true"
+                        onClick={(e) => e.preventDefault()}
+                      >
+                        {link.text}
+                      </Link>
+                    </span>
+                  ) : (
+                    <Link
+                      href={link.href}
+                      className="nav-link link-gray-100"
+                      onClick={handleLinkClick}
+                    >
+                      {link.text}
+                    </Link>
+                  )}
                 </li>
               ))}
             </ul>
@@ -156,22 +178,27 @@ export default function Header() {
                 style={{ objectFit: 'contain' }}
               />
               <Link
-                href="/login"
-                className="d-lg-none btn btn-outline-primary w-100"
+                href="#"
+                className="d-lg-none btn btn-outline-primary w-100 disabled"
+                tabIndex="-1"
+                aria-disabled="true"
                 onClick={handleLinkClick}
               >
                 登入
               </Link>
               <Link
-                href="/login"
-                className="d-none d-lg-block flex-shrink-0 me-6"
-                onClick={handleLinkClick}
+                href="#"
+                className="d-none d-lg-block btn text-primary border-0 p-0 flex-shrink-0 me-6 disabled"
+                tabIndex="-1"
+                aria-disabled="true"
               >
                 登入
               </Link>
               <Link
-                href="/register"
-                className="btn btn-primary w-100 w-lg-auto text-white mb-4 mb-lg-0"
+                href="#"
+                className="btn btn-primary w-100 w-lg-auto text-white mb-4 mb-lg-0 disabled"
+                tabIndex="-1"
+                aria-disabled="true"
                 onClick={handleLinkClick}
               >
                 註冊

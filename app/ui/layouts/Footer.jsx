@@ -1,13 +1,16 @@
+'use client';
+
 import Link from 'next/link';
 import Image from 'next/image';
 import styles from './Footer.module.scss';
+import { useTooltip } from '@/app/hooks/useBootstrap';
 
 // 導航連結資料
 const navLinks = [
   { href: '/sitters', text: '搜尋保母' },
-  { href: '/become-a-sitter', text: '成為保母' },
+  { href: '/become-a-sitter', text: '成為保母', disabled: true },
   { href: '/#index-qna', text: '常見問題' },
-  { href: '/login', text: '登入註冊' },
+  { href: '/login', text: '登入註冊', disabled: true },
 ];
 
 // 社群連結資料
@@ -46,6 +49,8 @@ const SocialIcons = ({ className = '' }) => (
 );
 
 export default function Footer() {
+  useTooltip();
+
   return (
     <footer className={`footer ${styles['bg-gradient-thirdly']} py-9 py-lg-17`}>
       <div className="container">
@@ -71,12 +76,31 @@ export default function Footer() {
             <div className="row">
               {navLinks.map((link) => (
                 <div className="col-6 col-md-auto mb-5 mb-md-0" key={link.text}>
-                  <Link
-                    href={link.href}
-                    className="text-light fs-10 fs-md-9 opacity-70-hover transition-base"
-                  >
-                    {link.text}
-                  </Link>
+                  {link.disabled ? (
+                    <span
+                      className="d-inline-block"
+                      tabIndex={0}
+                      data-bs-toggle="tooltip"
+                      data-bs-placement="top"
+                      title="功能即將上線，敬請期待！"
+                    >
+                      <a
+                        href="#"
+                        className="text-light fs-10 fs-md-9 disabled"
+                        onClick={(e) => e.preventDefault()}
+                        aria-disabled="true"
+                      >
+                        {link.text}
+                      </a>
+                    </span>
+                  ) : (
+                    <Link
+                      href={link.href}
+                      className="text-light fs-10 fs-md-9 opacity-70-hover transition-base"
+                    >
+                      {link.text}
+                    </Link>
+                  )}
                 </div>
               ))}
             </div>
