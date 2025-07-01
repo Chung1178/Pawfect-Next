@@ -1,5 +1,4 @@
 import '@/app/ui/global.scss';
-import BootstrapClient from '../ui/components/BootstrapClient';
 import { NotoSansTC } from '../ui/fonts';
 import Header from '../ui/layouts/Header';
 import Footer from '../ui/layouts/Footer';
@@ -16,7 +15,6 @@ export default function RootLayout({ children }) {
         <Header />
         {children}
         <Footer />
-        <BootstrapClient />
         <div id="modal-root"></div>
         <div id="datepicker-portal-root"></div>
       </body>
