@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import styles from './Header.module.scss';
 import { useTooltip } from '@/app/hooks/useBootstrap';
+import Logo from '../common/Logo/Logo';
 
 export default function Header() {
   useTooltip();
@@ -76,24 +77,7 @@ export default function Header() {
       id="navbar"
     >
       <div className={`${styles.headerContainer} container`}>
-        <Link href="/" className="navbar-brand">
-          <Image
-            src="/layout/layout-header-logo.png"
-            alt="PetSitter Logo Desktop"
-            width={178}
-            height={48}
-            className="d-none d-lg-block"
-            priority
-          />
-          <Image
-            src="/layout/layout-header-logo-sm.png"
-            alt="PetSitter Logo Mobile"
-            width={140}
-            height={40}
-            className="d-lg-none"
-            priority
-          />
-        </Link>
+        <Logo className="navbar-brand" />
 
         <button
           className="navbar-toggler border-0"
@@ -113,14 +97,7 @@ export default function Header() {
           aria-labelledby="offcanvasNavbarLabel"
         >
           <div className={`offcanvas-header p-4 ${styles.headerNavBgColor}`}>
-            <Link href="/" className="navbar-brand" onClick={handleLinkClick}>
-              <Image
-                src="/layout/layout-header-logo-sm.png"
-                alt="logo"
-                width={122}
-                height={27}
-              />
-            </Link>
+            <Logo className="navbar-brand" onClick={handleLinkClick} />
             <button
               type="button"
               className="btn-close text-reset"
