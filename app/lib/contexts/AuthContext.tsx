@@ -100,6 +100,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const [state, dispatch] = useReducer(authReducer, initialState);
 
+  // 元件首次掛載時執行，用於處理頁面刷新後的持續登入。
   useEffect(() => {
     const initializeAuth = () => {
       try {
@@ -192,6 +193,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
       localStorage.setItem('authToken', accessToken);
       localStorage.setItem('user', JSON.stringify(user));
+      // 註冊成功後，直接 dispatch LOGIN_SUCCESS，實現自動登入的 UX。
       dispatch({
         type: 'LOGIN_SUCCESS',
         payload: { user, token: accessToken },
