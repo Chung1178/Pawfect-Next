@@ -41,6 +41,7 @@ type Action =
   | { type: 'REGISTER_FAILURE' };
 
 interface AuthContextType extends State {
+  isAuthenticated: boolean;
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
   register: (payload: RegisterPayload) => Promise<void>;
