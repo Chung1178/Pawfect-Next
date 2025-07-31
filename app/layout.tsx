@@ -1,5 +1,6 @@
 import '@/app/ui/global.scss';
 import { NotoSansTC } from '@/app/ui/fonts';
+import { AuthProvider } from './lib/contexts/AuthContext';
 
 export const metadata = {
   title: 'Pawfect - 你的寵物好夥伴',
@@ -14,7 +15,7 @@ export default function RootLayout({
   return (
     <html lang="zh-Hant">
       <body className={`${NotoSansTC.className} antialiased`}>
-        {children}
+        <AuthProvider>{children}</AuthProvider>
 
         <div id="modal-root"></div>
         <div id="datepicker-portal-root"></div>

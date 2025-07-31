@@ -6,12 +6,14 @@ import Image from 'next/image';
 import styles from './Header.module.scss';
 import { useTooltip } from '@/app/hooks/useBootstrap';
 import Logo from '../common/Logo/Logo';
+import { useRouter } from 'next/navigation';
 
 export default function Header() {
   useTooltip();
   const [hasScrolled, setHasScrolled] = useState(false);
   const offcanvasRef = useRef(null);
   const offcanvasInstanceRef = useRef(null);
+  const router = useRouter();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -51,9 +53,16 @@ export default function Header() {
     };
   }, []);
 
-  const handleLinkClick = () => {
+  const handleLinkClick = (e, href) => {
+    e.preventDefault();
+
     if (offcanvasInstanceRef.current) {
       offcanvasInstanceRef.current.hide();
+      setTimeout(() => {
+        router.push(href);
+      }, 350); 
+    }else {
+      router.push(href);
     }
   };
 
@@ -136,7 +145,7 @@ export default function Header() {
                     <Link
                       href={link.href}
                       className="nav-link link-gray-100"
-                      onClick={handleLinkClick}
+                      onClick={(e) => {handleLinkClick(e, link.href)}}
                     >
                       {link.text}
                     </Link>
@@ -155,28 +164,26 @@ export default function Header() {
                 style={{ objectFit: 'contain' }}
               />
               <Link
-                href="#"
-                className="d-lg-none btn btn-outline-primary w-100 disabled"
+                href="/login"
+                className="d-lg-none btn btn-outline-primary w-100"
                 tabIndex="-1"
-                aria-disabled="true"
-                onClick={handleLinkClick}
+                onClick={(e) => handleLinkClick(e, '/login')}
               >
                 登入
               </Link>
               <Link
-                href="#"
-                className="d-none d-lg-block btn text-primary border-0 p-0 flex-shrink-0 me-6 disabled"
+                href="/login"
+                className="d-none d-lg-block btn text-primary border-0 p-0 flex-shrink-0 me-6"
                 tabIndex="-1"
-                aria-disabled="true"
+                onClick={(e) => handleLinkClick(e, '/login')}
               >
                 登入
               </Link>
               <Link
-                href="#"
-                className="btn btn-primary w-100 w-lg-auto text-white mb-4 mb-lg-0 disabled"
+                href="/register"
+                className="btn btn-primary w-100 w-lg-auto text-white mb-4 mb-lg-0"
                 tabIndex="-1"
-                aria-disabled="true"
-                onClick={handleLinkClick}
+                onClick={(e) => handleLinkClick(e, '/register')}
               >
                 註冊
               </Link>
