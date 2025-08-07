@@ -1,5 +1,5 @@
 import { Suspense } from 'react';
-import SittersPageClient from '@/app/ui/pages/SittersPageClient'; 
+import SittersPageClient from '@/app/(home)/sitters/SittersPageClient'; 
 
 function PageLoading() {
   return (

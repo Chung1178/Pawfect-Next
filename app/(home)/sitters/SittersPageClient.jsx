@@ -2,7 +2,7 @@
 
 import style from '@/app/ui/pages/sitters-page.module.scss';
 import Link from 'next/link';
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useMemo } from 'react';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { StarIcon, MapPinIcon, UserIcon } from '@heroicons/react/16/solid';
 
@@ -21,6 +21,10 @@ const filterSitters = (sitters, queryParams) => {
   const endDate = queryParams.get('endDate')
     ? new Date(queryParams.get('endDate'))
     : null;
+
+  if (!service && !petType && !startDate && !endDate) {
+    return sitters;
+  }
 
   return sitters.filter((sitter) => {
     // 條件1：篩選服務類型 (servicesOffered)
@@ -82,18 +86,19 @@ const filterSitters = (sitters, queryParams) => {
 };
 
 export default function SittersPageClient() {
-  const [allSitters, setAllSitters] = useState([]); // ✨ 儲存所有從後端獲取的（預篩選後）的保姆
-  const [filteredSitters, setFilteredSitters] = useState([]); // ✨ 儲存前端精細篩選後的保姆
+  const [allSitters, setAllSitters] = useState([]); // 儲存所有從後端獲取的（預篩選後）的保姆
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // ✨ 新增分頁相關的 state
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(0);
 
   const router = useRouter();
   const pathname = usePathname();
-  const searchParams = useSearchParams(); // ✨ 用 hook 獲取 URL 查詢參數
+  const searchParams = useSearchParams(); // 用 hook 獲取 URL 查詢參數
+
+  const filteredSitters = useMemo(() => {
+    return filterSitters(allSitters, searchParams);
+  }, [allSitters, searchParams]);
 
   const fetchAndFilterSitters = useCallback(async (currentQuery) => {
     setIsLoading(true);
@@ -103,23 +108,18 @@ export default function SittersPageClient() {
 
       //用 json-server 支援的參數去後端預篩選
       const apiQuery = new URLSearchParams();
-      if (queryParams.get('address')) {
-        apiQuery.set('address.city', queryParams.get('address'));
+      const city = queryParams.get('address.city');
+      if (city) {
+        apiQuery.set('address.city', city);
       }
-      //總是獲取所有 role=sitter 的使用者
-      apiQuery.set('role', 'sitter');
 
-      const url = `${API_BASE_URL}users?${apiQuery.toString()}`;
+      const url = `${API_BASE_URL}sitters?${apiQuery.toString()}`;
 
       const res = await fetch(url);
       if (!res.ok) throw new Error('資料獲取失敗');
 
       const data = await res.json();
       setAllSitters(data);
-
-      //在前端進行精細篩選
-      const finalFilteredData = filterSitters(data, queryParams);
-      setFilteredSitters(finalFilteredData);
     } catch (err) {
       console.error('Failed to process sitters:', err);
       setError(err.message);
@@ -140,6 +140,7 @@ export default function SittersPageClient() {
   };
 
   // --- 分頁邏輯 ---
+  const totalPages = Math.ceil(filteredSitters.length / ITEMS_PER_PAGE);
   const currentDisplaySitters = filteredSitters.slice(
     (currentPage - 1) * ITEMS_PER_PAGE,
     currentPage * ITEMS_PER_PAGE

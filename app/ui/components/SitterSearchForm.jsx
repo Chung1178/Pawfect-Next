@@ -89,38 +89,9 @@ export default function SearchFormFields({
   );
   const [startDate, endDate] = dateRange;
 
-  const petDropdownRef = useRef(null);
-  const petDropdownInstance = useRef(null);
-  const areaDropdownRef = useRef(null);
-  const areaDropdownInstance = useRef(null);
-
   useEffect(() => {
-    const loadBootstrap = async () => {
-      if (typeof window !== 'undefined') {
-        const { Dropdown } = await import('bootstrap');
-        petDropdownInstance.current = new Dropdown(petDropdownRef.current, {
-          autoClose: 'outside',
-          boundary: 'clippingParents',
-        });
-        areaDropdownInstance.current = new Dropdown(areaDropdownRef.current);
-      }
-    };
-
-    loadBootstrap();
-
-    return () => {
-      if (petDropdownInstance.current) petDropdownInstance.current.dispose();
-      if (areaDropdownInstance.current) areaDropdownInstance.current.dispose();
-    };
+    import('bootstrap');
   }, []);
-
-  const showPetDropdown = () => {
-    petDropdownInstance.current.toggle();
-  };
-
-  const showAreaDropdown = () => {
-    areaDropdownInstance.current.toggle();
-  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -176,11 +147,9 @@ export default function SearchFormFields({
             <label className="text-gray-500 mb-2 small d-block">您的寵物</label>
             <div className="dropdown">
               <button
-                ref={petDropdownRef}
                 className="form-control border-0 bg-gray-1000  text-start d-flex justify-content-between align-items-center py-4 px-5 rounded-3"
                 type="button"
                 data-bs-toggle="dropdown"
-                onClick={showPetDropdown}
               >
                 <div className="d-flex align-items-center">
                   <Image
@@ -218,10 +187,8 @@ export default function SearchFormFields({
             <label className="text-gray-500 mb-2 small d-block">您的地區</label>
             <div className="dropdown">
               <button
-                ref={areaDropdownRef}
                 className="form-control border-0 bg-gray-1000 text-start d-flex justify-content-between align-items-center py-4 px-5 rounded-3"
                 type="button"
-                onClick={showAreaDropdown}
                 data-bs-toggle="dropdown"
               >
                 <div className="d-flex align-items-center">

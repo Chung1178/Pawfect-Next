@@ -148,7 +148,7 @@ export default async function SitterPage({ params }) {
                   <h3 className="fs-7 fs-lg-4 mb-5 mb-lg-9 text-gray-200">
                     我能為您的寶貝做什麼?
                   </h3>
-                  {servicesOffered.map((service) => {
+                  {servicesOffered?.map((service) => {
                     const serviceStyle = getServiceStyles(service.name);
                     return (
                       <React.Fragment key={service.serviceId}>
