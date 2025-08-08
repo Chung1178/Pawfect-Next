@@ -12,6 +12,13 @@ import { ChevronDownIcon } from '@heroicons/react/20/solid';
 const ITEMS_PER_PAGE = 8;
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
+const sortOptions = [
+  { value: 'default', label: '預設排序' },
+  { value: 'rating_desc', label: '評分：由高至低' },
+  { value: 'price_asc', label: '價格：由低至高' },
+  { value: 'price_desc', label: '價格：由高至低' },
+];
+
 const filterSitters = (sitters, queryParams) => {
   const service = queryParams.get('service');
   const petType = queryParams.get('petType');
@@ -96,9 +103,86 @@ export default function SittersPageClient() {
   const pathname = usePathname();
   const searchParams = useSearchParams(); // 用 hook 獲取 URL 查詢參數
 
+  const [sortOption, setSortOption] = useState(
+    searchParams.get('sort') || 'default'
+  );
+
+  useEffect(() => {
+    import('bootstrap');
+  }, []);
+  // --排序邏輯--
+  const handleSortChange = (newSortValue) => {
+    setSortOption(newSortValue);
+
+    const currentParams = new URLSearchParams(searchParams.toString());
+    if (newSortValue === 'default') {
+      currentParams.delete('sort');
+    } else {
+      currentParams.set('sort', newSortValue);
+    }
+
+    currentParams.set('page', '1');
+    setCurrentPage(1);
+
+    router.push(`${pathname}?${currentParams.toString()}`);
+  };
+
+  const currentSortLabel = useMemo(() => {
+    const selected = sortOptions.find((opt) => opt.value === sortOption);
+    return selected ? selected.label : '預設排序';
+  }, [sortOption]);
+
   const filteredSitters = useMemo(() => {
     return filterSitters(allSitters, searchParams);
   }, [allSitters, searchParams]);
+
+  const sortedSitters = useMemo(() => {
+    const currentSort = searchParams.get('sort') || 'default';
+    const selectedService = searchParams.get('service');
+
+    const sortableSitters = [...filteredSitters];
+
+    const getPrice = (sitter) => {
+      if (!sitter.servicesOffered || sitter.servicesOffered.length === 0) {
+        return 0; // 如果沒有服務，價格為 0
+      }
+      if (selectedService) {
+        const service = sitter.servicesOffered.find(
+          (s) => s.name === selectedService
+        );
+        return service ? service.price : 0; // 如果該保姆不提供此服務，價格視為 0
+      }
+      // 如果沒有篩選服務，就用第一個服務的價格作為預設值
+      return sitter.servicesOffered[0].price || 0;
+    };
+
+    switch (currentSort) {
+      case 'rating_desc':
+        sortableSitters.sort((a, b) => b.rating - a.rating);
+        break;
+      case 'price_asc':
+        // 假設你的價格在 servicesOffered[0].price
+        sortableSitters.sort((a, b) => getPrice(a) - getPrice(b));
+        break;
+      case 'price_desc':
+        sortableSitters.sort((a, b) => getPrice(b) - getPrice(a));
+        break;
+      case 'default':
+      default:
+        // 預設排序，不做任何事，維持 API 回傳的順序
+        break;
+    }
+
+    return sortableSitters;
+  }, [filteredSitters, searchParams]);
+
+  useEffect(() => {
+    // 每次 URL 參數變化時，都從 searchParams 中讀取 'sort' 的值
+    const sortFromURL = searchParams.get('sort') || 'default';
+
+    // 更新 sortOption state 來匹配 URL
+    setSortOption(sortFromURL);
+  }, [searchParams]); // 這個 effect 的依賴項只有 searchParams
 
   const fetchAndFilterSitters = useCallback(async (currentQuery) => {
     setIsLoading(true);
@@ -140,8 +224,8 @@ export default function SittersPageClient() {
   };
 
   // --- 分頁邏輯 ---
-  const totalPages = Math.ceil(filteredSitters.length / ITEMS_PER_PAGE);
-  const currentDisplaySitters = filteredSitters.slice(
+  const totalPages = Math.ceil(sortedSitters.length / ITEMS_PER_PAGE);
+  const currentDisplaySitters = sortedSitters.slice(
     (currentPage - 1) * ITEMS_PER_PAGE,
     currentPage * ITEMS_PER_PAGE
   );
@@ -198,45 +282,24 @@ export default function SittersPageClient() {
                   data-bs-toggle="dropdown"
                   aria-expanded="false"
                 >
-                  <span className="me-11 me-lg-31 text-gray-300">排序方式</span>
+                  <span className="me-11 me-lg-31 text-gray-300">
+                    {currentSortLabel}
+                  </span>
                   <ChevronDownIcon
                     className="text-gray-500"
                     style={{ width: '1.25rem', height: '1.25rem' }}
                   />
                 </button>
                 <ul className="dropdown-menu py-4 w-100">
-                  <li>
-                    <a
-                      className="dropdown-item py-2 px-4 mb-2 bg-gray-1000-hover"
-                      href="#"
+                  {sortOptions.map((option) => (
+                    <li
+                      className="dropdown-item py-2 px-4 mb-2 bg-primary-hover text-white-hover"
+                      key={option.value}
+                      onClick={() => handleSortChange(option.value)}
                     >
-                      {`價錢: 高 => 低`}
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      className="dropdown-item py-2 px-4 mb-2 bg-gray-1000-hover"
-                      href="#"
-                    >
-                      {`價錢: 低 => 高`}
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      className="dropdown-item py-2 px-4 mb-2 bg-gray-1000-hover"
-                      href="#"
-                    >
-                      {`距離: 近 => 遠`}
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      className="dropdown-item py-2 px-4 mb-2 bg-gray-1000-hover"
-                      href="#"
-                    >
-                      {`距離: 遠 => 近`}
-                    </a>
-                  </li>
+                      {option.label}
+                    </li>
+                  ))}
                 </ul>
               </div>
             </div>
