@@ -108,7 +108,12 @@ export default function SittersPageClient() {
   );
 
   useEffect(() => {
-    import('bootstrap');
+    const initBootstrap = async () => {
+      if (typeof window !== 'undefined') {
+        await import('bootstrap');
+      }
+    };
+    initBootstrap();
   }, []);
   // --排序邏輯--
   const handleSortChange = (newSortValue) => {

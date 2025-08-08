@@ -90,8 +90,13 @@ export default function SearchFormFields({
   const [startDate, endDate] = dateRange;
 
   useEffect(() => {
-    import('bootstrap');
-  }, []);
+  const initBootstrap = async () => {
+    if (typeof window !== 'undefined') {
+      await import('bootstrap');
+    }
+  };
+  initBootstrap();
+}, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();

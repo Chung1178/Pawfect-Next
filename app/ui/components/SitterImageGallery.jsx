@@ -12,13 +12,14 @@ import 'swiper/css/free-mode';
 
 import style from './SitterImageGallery.module.scss';
 
-import { useMemo, useRef, useState } from 'react';
+import { useMemo, useRef, useState, useEffect } from 'react';
 
 export default function SitterImageGallery({ profilePictureUrl, pictureUrls }) {
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
+  const [mainSwiper, setMainSwiper] = useState(null);
+  const [activeThumbIndex, setActiveThumbIndex] = useState(0);
   const navigationPrevRef = useRef(null);
   const navigationNextRef = useRef(null);
-  const [activeThumbIndex, setActiveThumbIndex] = useState(0);
 
   const orderedImages = useMemo(() => {
     const sources = [];
@@ -47,6 +48,24 @@ export default function SitterImageGallery({ profilePictureUrl, pictureUrls }) {
 
     return sources;
   }, [profilePictureUrl, pictureUrls]);
+
+  useEffect(() => {
+    if (mainSwiper) {
+      // 職責1: 同步縮圖點擊
+      if (mainSwiper.realIndex !== activeThumbIndex) {
+        mainSwiper.slideToLoop(activeThumbIndex);
+      }
+
+      // 職責2: ✨ 綁定自訂導航元素
+      // 確保 navigation 的參數指向最新的 ref.current
+      if (mainSwiper.params.navigation) {
+        mainSwiper.params.navigation.prevEl = navigationPrevRef.current;
+        mainSwiper.params.navigation.nextEl = navigationNextRef.current;
+        mainSwiper.navigation.init();
+        mainSwiper.navigation.update();
+      }
+    }
+  }, [activeThumbIndex, mainSwiper]);
 
   const isPlaceholderOnly =
     orderedImages.length === 1 &&
@@ -77,29 +96,20 @@ export default function SitterImageGallery({ profilePictureUrl, pictureUrls }) {
         <div className="ratio ratio-16x9 mb-5">
           <Swiper
             modules={[Thumbs, Navigation]}
+            onSwiper={setMainSwiper}
             spaceBetween={10}
             slidesPerView={1}
             loop={true}
-            navigation={
-              showNavigationAndThumbs
-                ? {
-                    // 只有多張圖時才啟用導航
-                    prevEl: navigationPrevRef.current,
-                    nextEl: navigationNextRef.current,
-                  }
-                : false
-            } // 如果不顯示導航，設為 false
-            thumbs={
-              showNavigationAndThumbs ? { swiper: thumbsSwiper } : undefined
-            }
-            className={`${style.sitterSlide} position-absolute top-0 start-0 w-100 h-100`}
-            onBeforeInit={(swiper) => {
-              // 確保 ref 在 Swiper 初始化前被設定
-              if (showNavigationAndThumbs) {
-                swiper.params.navigation.prevEl = navigationPrevRef.current;
-                swiper.params.navigation.nextEl = navigationNextRef.current;
-              }
+            navigation={{
+              enabled: showNavigationAndThumbs,
+              prevEl: navigationPrevRef.current,
+              nextEl: navigationNextRef.current,
             }}
+            thumbs={{
+              swiper:
+                thumbsSwiper && !thumbsSwiper.destroyed ? thumbsSwiper : null,
+            }}
+            className={`${style.sitterSlide} position-absolute top-0 start-0 w-100 h-100`}
             onSlideChange={(swiper) => {
               setActiveThumbIndex(swiper.realIndex);
             }}
@@ -144,6 +154,7 @@ export default function SitterImageGallery({ profilePictureUrl, pictureUrls }) {
         <Swiper
           modules={[Thumbs, FreeMode]}
           onSwiper={setThumbsSwiper}
+          loop={false}
           spaceBetween={16}
           slidesPerView={'auto'}
           freeMode={true}
@@ -156,6 +167,7 @@ export default function SitterImageGallery({ profilePictureUrl, pictureUrls }) {
               className={`${style.thumbSlide}    ${
                 index === activeThumbIndex ? style.activeThumb : ''
               }`}
+              onClick={() => setActiveThumbIndex(index)}
             >
               <img
                 src={image.src}
