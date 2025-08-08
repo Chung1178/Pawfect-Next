@@ -78,8 +78,10 @@
 }
 
 // --- Pagination Disabled Style Override ---
-:global(.page-item.disabled .page-link) {
-  background-color: $gray-900; 
-  border-color: $gray-700;     
-  color: $gray-600;            
+.paginationContainer {
+  :global(.page-item.disabled .page-link) {
+    background-color: $gray-900;
+    border-color: $gray-700;
+    color: $gray-600;
+  }
 }

@@ -433,7 +433,9 @@ export default function SittersPageClient() {
             )}
 
             {/* 渲染分頁元件 */}
-            {!isLoading && totalPages > 1 && renderPagination()}
+            <div className={style.paginationContainer}>
+              {!isLoading && totalPages > 1 && renderPagination()}
+            </div>
           </div>
         </section>
       </main>
