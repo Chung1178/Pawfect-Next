@@ -247,6 +247,7 @@ export default function SittersPageClient() {
         <li
           key={i}
           className={`page-item ${currentPage === i ? 'active' : ''}`}
+          aria-current={currentPage === i ? 'page' : undefined}
         >
           <button className="page-link" onClick={() => handlePageChange(i)}>
             {i}
@@ -254,6 +255,38 @@ export default function SittersPageClient() {
         </li>
       );
     }
+
+    return (
+      <nav aria-label="Sitter navigation">
+        <ul className="pagination justify-content-center">
+          <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
+            <button
+              className="page-link"
+              onClick={() => handlePageChange(currentPage - 1)}
+              aria-label="Previous"
+            >
+              <span aria-hidden="true">&laquo;</span>
+            </button>
+          </li>
+
+          {pages}
+
+          <li
+            className={`page-item ${
+              currentPage === totalPages ? 'disabled' : ''
+            }`}
+          >
+            <button
+              className="page-link"
+              onClick={() => handlePageChange(currentPage + 1)}
+              aria-label="Next"
+            >
+              <span aria-hidden="true">&raquo;</span>
+            </button>
+          </li>
+        </ul>
+      </nav>
+    );
   };
 
   return (
@@ -395,7 +428,7 @@ export default function SittersPageClient() {
             )}
 
             {/* 渲染分頁元件 */}
-            {totalPages > 1 && renderPagination()}
+            {!isLoading && totalPages > 1 && renderPagination()}
           </div>
         </section>
       </main>

@@ -8,7 +8,7 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export default async function SitterPage({ params }) {
   const { sitterId } = await params;
-  const res = await fetch(`${API_BASE_URL}users/${sitterId}`);
+  const res = await fetch(`${API_BASE_URL}sitters/${sitterId}`);
   const data = await res.json();
   const {
     id,
