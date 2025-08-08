@@ -8,7 +8,7 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export default async function SitterPage({ params }) {
   const { sitterId } = await params;
-  const res = await fetch(`${API_BASE_URL}users/${sitterId}`);
+  const res = await fetch(`${API_BASE_URL}sitters/${sitterId}`);
   const data = await res.json();
   const {
     id,
@@ -148,7 +148,7 @@ export default async function SitterPage({ params }) {
                   <h3 className="fs-7 fs-lg-4 mb-5 mb-lg-9 text-gray-200">
                     我能為您的寶貝做什麼?
                   </h3>
-                  {servicesOffered.map((service) => {
+                  {servicesOffered?.map((service) => {
                     const serviceStyle = getServiceStyles(service.name);
                     return (
                       <React.Fragment key={service.serviceId}>

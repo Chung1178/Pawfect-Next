@@ -10,7 +10,7 @@ const navLinks = [
   { href: '/sitters', text: '搜尋保母' },
   { href: '/become-a-sitter', text: '成為保母', disabled: true },
   { href: '/#index-qna', text: '常見問題' },
-  { href: '/login', text: '登入註冊', disabled: true },
+  { href: '/login', text: '登入註冊' },
 ];
 
 // 社群連結資料

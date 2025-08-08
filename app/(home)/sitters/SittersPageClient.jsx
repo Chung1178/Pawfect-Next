@@ -2,7 +2,7 @@
 
 import style from '@/app/ui/pages/sitters-page.module.scss';
 import Link from 'next/link';
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useMemo } from 'react';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { StarIcon, MapPinIcon, UserIcon } from '@heroicons/react/16/solid';
 
@@ -11,6 +11,13 @@ import { ChevronDownIcon } from '@heroicons/react/20/solid';
 
 const ITEMS_PER_PAGE = 8;
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+
+const sortOptions = [
+  { value: 'default', label: '預設排序' },
+  { value: 'rating_desc', label: '評分：由高至低' },
+  { value: 'price_asc', label: '價格：由低至高' },
+  { value: 'price_desc', label: '價格：由高至低' },
+];
 
 const filterSitters = (sitters, queryParams) => {
   const service = queryParams.get('service');
@@ -21,6 +28,10 @@ const filterSitters = (sitters, queryParams) => {
   const endDate = queryParams.get('endDate')
     ? new Date(queryParams.get('endDate'))
     : null;
+
+  if (!service && !petType && !startDate && !endDate) {
+    return sitters;
+  }
 
   return sitters.filter((sitter) => {
     // 條件1：篩選服務類型 (servicesOffered)
@@ -82,18 +93,101 @@ const filterSitters = (sitters, queryParams) => {
 };
 
 export default function SittersPageClient() {
-  const [allSitters, setAllSitters] = useState([]); // ✨ 儲存所有從後端獲取的（預篩選後）的保姆
-  const [filteredSitters, setFilteredSitters] = useState([]); // ✨ 儲存前端精細篩選後的保姆
+  const [allSitters, setAllSitters] = useState([]); // 儲存所有從後端獲取的（預篩選後）的保姆
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // ✨ 新增分頁相關的 state
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(0);
 
   const router = useRouter();
   const pathname = usePathname();
-  const searchParams = useSearchParams(); // ✨ 用 hook 獲取 URL 查詢參數
+  const searchParams = useSearchParams(); // 用 hook 獲取 URL 查詢參數
+
+  const [sortOption, setSortOption] = useState(
+    searchParams.get('sort') || 'default'
+  );
+
+  useEffect(() => {
+    const initBootstrap = async () => {
+      if (typeof window !== 'undefined') {
+        await import('bootstrap');
+      }
+    };
+    initBootstrap();
+  }, []);
+  // --排序邏輯--
+  const handleSortChange = (newSortValue) => {
+    setSortOption(newSortValue);
+
+    const currentParams = new URLSearchParams(searchParams.toString());
+    if (newSortValue === 'default') {
+      currentParams.delete('sort');
+    } else {
+      currentParams.set('sort', newSortValue);
+    }
+
+    currentParams.set('page', '1');
+    setCurrentPage(1);
+
+    router.push(`${pathname}?${currentParams.toString()}`);
+  };
+
+  const currentSortLabel = useMemo(() => {
+    const selected = sortOptions.find((opt) => opt.value === sortOption);
+    return selected ? selected.label : '預設排序';
+  }, [sortOption]);
+
+  const filteredSitters = useMemo(() => {
+    return filterSitters(allSitters, searchParams);
+  }, [allSitters, searchParams]);
+
+  const sortedSitters = useMemo(() => {
+    const currentSort = searchParams.get('sort') || 'default';
+    const selectedService = searchParams.get('service');
+
+    const sortableSitters = [...filteredSitters];
+
+    const getPrice = (sitter) => {
+      if (!sitter.servicesOffered || sitter.servicesOffered.length === 0) {
+        return 0; // 如果沒有服務，價格為 0
+      }
+      if (selectedService) {
+        const service = sitter.servicesOffered.find(
+          (s) => s.name === selectedService
+        );
+        return service ? service.price : 0; // 如果該保姆不提供此服務，價格視為 0
+      }
+      // 如果沒有篩選服務，就用第一個服務的價格作為預設值
+      return sitter.servicesOffered[0].price || 0;
+    };
+
+    switch (currentSort) {
+      case 'rating_desc':
+        sortableSitters.sort((a, b) => b.rating - a.rating);
+        break;
+      case 'price_asc':
+        // 假設你的價格在 servicesOffered[0].price
+        sortableSitters.sort((a, b) => getPrice(a) - getPrice(b));
+        break;
+      case 'price_desc':
+        sortableSitters.sort((a, b) => getPrice(b) - getPrice(a));
+        break;
+      case 'default':
+      default:
+        // 預設排序，不做任何事，維持 API 回傳的順序
+        break;
+    }
+
+    return sortableSitters;
+  }, [filteredSitters, searchParams]);
+
+  useEffect(() => {
+    // 每次 URL 參數變化時，都從 searchParams 中讀取 'sort' 的值
+    const sortFromURL = searchParams.get('sort') || 'default';
+
+    // 更新 sortOption state 來匹配 URL
+    setSortOption(sortFromURL);
+  }, [searchParams]); // 這個 effect 的依賴項只有 searchParams
 
   const fetchAndFilterSitters = useCallback(async (currentQuery) => {
     setIsLoading(true);
@@ -103,23 +197,18 @@ export default function SittersPageClient() {
 
       //用 json-server 支援的參數去後端預篩選
       const apiQuery = new URLSearchParams();
-      if (queryParams.get('address')) {
-        apiQuery.set('address.city', queryParams.get('address'));
+      const city = queryParams.get('address.city');
+      if (city) {
+        apiQuery.set('address.city', city);
       }
-      //總是獲取所有 role=sitter 的使用者
-      apiQuery.set('role', 'sitter');
 
-      const url = `${API_BASE_URL}users?${apiQuery.toString()}`;
+      const url = `${API_BASE_URL}sitters?${apiQuery.toString()}`;
 
       const res = await fetch(url);
       if (!res.ok) throw new Error('資料獲取失敗');
 
       const data = await res.json();
       setAllSitters(data);
-
-      //在前端進行精細篩選
-      const finalFilteredData = filterSitters(data, queryParams);
-      setFilteredSitters(finalFilteredData);
     } catch (err) {
       console.error('Failed to process sitters:', err);
       setError(err.message);
@@ -140,7 +229,8 @@ export default function SittersPageClient() {
   };
 
   // --- 分頁邏輯 ---
-  const currentDisplaySitters = filteredSitters.slice(
+  const totalPages = Math.ceil(sortedSitters.length / ITEMS_PER_PAGE);
+  const currentDisplaySitters = sortedSitters.slice(
     (currentPage - 1) * ITEMS_PER_PAGE,
     currentPage * ITEMS_PER_PAGE
   );
@@ -162,6 +252,7 @@ export default function SittersPageClient() {
         <li
           key={i}
           className={`page-item ${currentPage === i ? 'active' : ''}`}
+          aria-current={currentPage === i ? 'page' : undefined}
         >
           <button className="page-link" onClick={() => handlePageChange(i)}>
             {i}
@@ -169,6 +260,38 @@ export default function SittersPageClient() {
         </li>
       );
     }
+
+    return (
+      <nav aria-label="Sitter navigation">
+        <ul className="pagination justify-content-center">
+          <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
+            <button
+              className="page-link"
+              onClick={() => handlePageChange(currentPage - 1)}
+              aria-label="Previous"
+            >
+              <span aria-hidden="true">&laquo;</span>
+            </button>
+          </li>
+
+          {pages}
+
+          <li
+            className={`page-item ${
+              currentPage === totalPages ? 'disabled' : ''
+            }`}
+          >
+            <button
+              className="page-link"
+              onClick={() => handlePageChange(currentPage + 1)}
+              aria-label="Next"
+            >
+              <span aria-hidden="true">&raquo;</span>
+            </button>
+          </li>
+        </ul>
+      </nav>
+    );
   };
 
   return (
@@ -197,45 +320,24 @@ export default function SittersPageClient() {
                   data-bs-toggle="dropdown"
                   aria-expanded="false"
                 >
-                  <span className="me-11 me-lg-31 text-gray-300">排序方式</span>
+                  <span className="me-11 me-lg-31 text-gray-300">
+                    {currentSortLabel}
+                  </span>
                   <ChevronDownIcon
                     className="text-gray-500"
                     style={{ width: '1.25rem', height: '1.25rem' }}
                   />
                 </button>
                 <ul className="dropdown-menu py-4 w-100">
-                  <li>
-                    <a
-                      className="dropdown-item py-2 px-4 mb-2 bg-gray-1000-hover"
-                      href="#"
+                  {sortOptions.map((option) => (
+                    <li
+                      className="dropdown-item py-2 px-4 mb-2 bg-primary-hover text-white-hover"
+                      key={option.value}
+                      onClick={() => handleSortChange(option.value)}
                     >
-                      {`價錢: 高 => 低`}
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      className="dropdown-item py-2 px-4 mb-2 bg-gray-1000-hover"
-                      href="#"
-                    >
-                      {`價錢: 低 => 高`}
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      className="dropdown-item py-2 px-4 mb-2 bg-gray-1000-hover"
-                      href="#"
-                    >
-                      {`距離: 近 => 遠`}
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      className="dropdown-item py-2 px-4 mb-2 bg-gray-1000-hover"
-                      href="#"
-                    >
-                      {`距離: 遠 => 近`}
-                    </a>
-                  </li>
+                      {option.label}
+                    </li>
+                  ))}
                 </ul>
               </div>
             </div>
@@ -331,7 +433,9 @@ export default function SittersPageClient() {
             )}
 
             {/* 渲染分頁元件 */}
-            {totalPages > 1 && renderPagination()}
+            <div className={style.paginationContainer}>
+              {!isLoading && totalPages > 1 && renderPagination()}
+            </div>
           </div>
         </section>
       </main>

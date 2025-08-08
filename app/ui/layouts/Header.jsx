@@ -5,12 +5,15 @@ import Link from 'next/link';
 import Image from 'next/image';
 import styles from './Header.module.scss';
 import { useTooltip } from '@/app/hooks/useBootstrap';
+import Logo from '../common/Logo/Logo';
+import { useRouter } from 'next/navigation';
 
 export default function Header() {
   useTooltip();
   const [hasScrolled, setHasScrolled] = useState(false);
   const offcanvasRef = useRef(null);
   const offcanvasInstanceRef = useRef(null);
+  const router = useRouter();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -50,9 +53,16 @@ export default function Header() {
     };
   }, []);
 
-  const handleLinkClick = () => {
+  const handleLinkClick = (e, href) => {
+    e.preventDefault();
+
     if (offcanvasInstanceRef.current) {
       offcanvasInstanceRef.current.hide();
+      setTimeout(() => {
+        router.push(href);
+      }, 350); 
+    }else {
+      router.push(href);
     }
   };
 
@@ -76,24 +86,7 @@ export default function Header() {
       id="navbar"
     >
       <div className={`${styles.headerContainer} container`}>
-        <Link href="/" className="navbar-brand">
-          <Image
-            src="/layout/layout-header-logo.png"
-            alt="PetSitter Logo Desktop"
-            width={178}
-            height={48}
-            className="d-none d-lg-block"
-            priority
-          />
-          <Image
-            src="/layout/layout-header-logo-sm.png"
-            alt="PetSitter Logo Mobile"
-            width={140}
-            height={40}
-            className="d-lg-none"
-            priority
-          />
-        </Link>
+        <Logo className="navbar-brand" />
 
         <button
           className="navbar-toggler border-0"
@@ -113,14 +106,7 @@ export default function Header() {
           aria-labelledby="offcanvasNavbarLabel"
         >
           <div className={`offcanvas-header p-4 ${styles.headerNavBgColor}`}>
-            <Link href="/" className="navbar-brand" onClick={handleLinkClick}>
-              <Image
-                src="/layout/layout-header-logo-sm.png"
-                alt="logo"
-                width={122}
-                height={27}
-              />
-            </Link>
+            <Logo className="navbar-brand" onClick={handleLinkClick} />
             <button
               type="button"
               className="btn-close text-reset"
@@ -159,7 +145,7 @@ export default function Header() {
                     <Link
                       href={link.href}
                       className="nav-link link-gray-100"
-                      onClick={handleLinkClick}
+                      onClick={(e) => {handleLinkClick(e, link.href)}}
                     >
                       {link.text}
                     </Link>
@@ -178,28 +164,26 @@ export default function Header() {
                 style={{ objectFit: 'contain' }}
               />
               <Link
-                href="#"
-                className="d-lg-none btn btn-outline-primary w-100 disabled"
+                href="/login"
+                className="d-lg-none btn btn-outline-primary w-100"
                 tabIndex="-1"
-                aria-disabled="true"
-                onClick={handleLinkClick}
+                onClick={(e) => handleLinkClick(e, '/login')}
               >
                 登入
               </Link>
               <Link
-                href="#"
-                className="d-none d-lg-block btn text-primary border-0 p-0 flex-shrink-0 me-6 disabled"
+                href="/login"
+                className="d-none d-lg-block btn text-primary border-0 p-0 flex-shrink-0 me-6"
                 tabIndex="-1"
-                aria-disabled="true"
+                onClick={(e) => handleLinkClick(e, '/login')}
               >
                 登入
               </Link>
               <Link
-                href="#"
-                className="btn btn-primary w-100 w-lg-auto text-white mb-4 mb-lg-0 disabled"
+                href="/register"
+                className="btn btn-primary w-100 w-lg-auto text-white mb-4 mb-lg-0"
                 tabIndex="-1"
-                aria-disabled="true"
-                onClick={handleLinkClick}
+                onClick={(e) => handleLinkClick(e, '/register')}
               >
                 註冊
               </Link>
