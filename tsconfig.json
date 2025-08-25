@@ -29,6 +29,6 @@
     "**/*.ts",
     "**/*.tsx",
     "app/(home)/page.jsx"
-  ],
+, "vitest.config.mts"  ],
   "exclude": ["node_modules"]
 }
