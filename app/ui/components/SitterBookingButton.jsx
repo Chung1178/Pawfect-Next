@@ -12,8 +12,12 @@ import { zhTW } from 'date-fns/locale/zh-TW';
 import { useRouter } from 'next/navigation';
 import { createPortal } from 'react-dom';
 import { SERVICE_TIME_SLOTS_DATA } from '@/app/lib/placeholder-data';
+import { useAuth } from '@/app/lib/contexts/AuthContext';
+import { format } from 'date-fns';
+import Link from 'next/link';
 
 registerLocale('zh-TW', zhTW);
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function SitterBookingButton({
   sitterId,
@@ -34,6 +38,7 @@ export default function SitterBookingButton({
   const hasDateValue = startDate !== null;
 
   const router = useRouter();
+  const { user, isAuthenticated } = useAuth();
 
   useEffect(() => {
     setIsClient(true);
@@ -65,8 +70,14 @@ export default function SitterBookingButton({
   };
 
   // 處理表單提交
-  const handleBookingSubmit = (e) => {
+  const handleBookingSubmit = async (e) => {
     e.preventDefault();
+
+    if (!user) {
+      alert('請先登入才能進行預約！');
+      router.push('/login');
+      return;
+    }
 
     // 簡單的驗證
     if (!selectedDateRange || !selectedTimeSlot || !selectedService) {
@@ -80,26 +91,63 @@ export default function SitterBookingButton({
     );
     const servicePrice = matchedService ? matchedService.price : 0;
     const serviceUnit = matchedService ? matchedService.unit : '';
+    const bookingStartDate = selectedDateRange[0]
+      ? format(selectedDateRange[0], 'yyyy-MM-dd')
+      : '';
+    const bookingEndDate = selectedDateRange[1]
+      ? format(selectedDateRange[1], 'yyyy-MM-dd')
+      : '';
 
-    // 1. 構建 query string
-    const query = new URLSearchParams();
-    query.set('sitterId', sitterId);
-    query.set('sitterName', sitterName);
-    if (selectedDateRange[0])
-      query.set('startDate', selectedDateRange[0].toISOString().split('T')[0]);
-    if (selectedDateRange[1])
-      query.set('endDate', selectedDateRange[1].toISOString().split('T')[0]);
-    // query.set('date', selectedDate.toISOString().split('T')[0]);
-    query.set('time', selectedTimeSlot);
-    query.set('service', selectedService);
-    query.set('price', servicePrice);
-    query.set('unit', serviceUnit);
+    const bookingData = {
+      sitterId: sitterId,
+      sitterName: sitterName,
+      userId: user.id,
+      startDate: bookingStartDate,
+      endDate: bookingEndDate,
+      time: selectedTimeSlot,
+      service: selectedService,
+      price: servicePrice,
+      unit: serviceUnit,
+      status: 'pending',
+      createdAt: new Date().toISOString(),
+    };
 
-    const queryString = query.toString();
+    try {
+      console.log('正在發送預約請求...', bookingData);
 
-    hideModal();
+      const response = await fetch(`${API_URL}bookings`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(bookingData),
+      });
 
-    router.push(`/booking?${queryString}`);
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || '預約請求失敗，請稍後再試');
+      }
+
+      const newBooking = await response.json();
+      console.log('預約成功，後端回傳資料:', newBooking);
+
+      const queryParams = {
+        sitterId: newBooking.sitterId,
+        sitterName: newBooking.sitterName,
+        startDate: newBooking.startDate,
+        endDate: newBooking.endDate,
+        time: newBooking.time,
+        service: newBooking.service,
+        price: newBooking.price,
+        unit: newBooking.unit,
+      };
+      const queryString = new URLSearchParams(queryParams).toString();
+
+      hideModal();
+
+      router.push(`/booking?${queryString}`);
+    } catch (error) {
+      console.error('預約過程中發生錯誤:', error);
+      alert(`預約失敗：${error.message}`);
+    }
   };
 
   // 時段選項
@@ -238,14 +286,22 @@ export default function SitterBookingButton({
 
   return (
     <>
-      <button
-        ref={modalRef}
-        type="button"
-        className="btn btn-primary w-100 booking-primary-btn text-light"
-        onClick={openModal}
-      >
-        立即預約
-      </button>
+      {isAuthenticated ? (
+        <button
+          type="button"
+          className="btn btn-primary w-100 booking-primary-btn text-light"
+          onClick={openModal}
+        >
+          立即預約
+        </button>
+      ) : (
+        <Link
+          href="/login"
+          className="btn btn-primary w-100 booking-primary-btn text-light"
+        >
+          請先登入以預約
+        </Link>
+      )}
       {isClient
         ? createPortal(BookingModal, document.getElementById('modal-root'))
         : null}
