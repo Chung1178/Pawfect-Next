@@ -356,7 +356,8 @@ export default function SittersPageClient() {
                 className="row row-cols-1 row-cols-md-2 row-cols-lg-4 gy-7 gy-md-11 mb-9 mb-lg-13"
                 variants={containerVariants}
                 initial="hidden"
-                animate="visible"
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.2 }}
               >
                 {currentDisplaySitters.map((sitter) => (
                   <motion.div
