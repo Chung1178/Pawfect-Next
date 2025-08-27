@@ -22,3 +22,16 @@ export const cardVariants = {
     },
   },
 };
+
+// 裝飾性小圖示用
+export const iconVariants = {
+  hidden: { scale: 0 },
+  visible: {
+    scale: 1,
+    transition: {
+      type: 'spring',
+      stiffness: 260,
+      damping: 20,
+    },
+  },
+};
