@@ -106,22 +106,14 @@
 }
 
 .decorativeIcon1 {
-  transition: transform 0.3s;
   box-sizing: border-box;
-  display: block;
   width: 75px;
   height: 109px;
-  &:hover {
-    transform: rotate(120deg);
-  }
 }
 
 .decorativeIcon2 {
   transform: rotate(90deg);
   transition: transform 0.3s;
-  &:hover {
-    transform: rotate(15deg);
-  }
 }
 
 /* --- FAQ Section --- */

@@ -8,6 +8,8 @@ import { StarIcon, MapPinIcon, UserIcon } from '@heroicons/react/16/solid';
 
 import SitterSearch from '@/app/ui/components/SitterSearch';
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
+import { motion } from 'framer-motion';
+import { containerVariants, cardVariants } from '@/app/lib/animations';
 
 const ITEMS_PER_PAGE = 8;
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -350,11 +352,18 @@ export default function SittersPageClient() {
             ) : error ? (
               <div className="alert alert-danger">{error}</div>
             ) : currentDisplaySitters.length > 0 ? (
-              <div className="row row-cols-1 row-cols-md-2 row-cols-lg-4 gy-7 gy-md-11 mb-9 mb-lg-13">
+              <motion.div
+                className="row row-cols-1 row-cols-md-2 row-cols-lg-4 gy-7 gy-md-11 mb-9 mb-lg-13"
+                variants={containerVariants}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.2 }}
+              >
                 {currentDisplaySitters.map((sitter) => (
-                  <div
+                  <motion.div
                     className="col d-flex flex-column flex-md-row"
                     key={sitter.id}
+                    variants={cardVariants}
                   >
                     <div className="card bg-transparent border-0">
                       <img
@@ -423,9 +432,9 @@ export default function SittersPageClient() {
                         </Link>
                       </div>
                     </div>
-                  </div>
+                  </motion.div>
                 ))}
-              </div>
+              </motion.div>
             ) : (
               <p className="text-center text-muted py-5">
                 找不到符合條件的保姆。
