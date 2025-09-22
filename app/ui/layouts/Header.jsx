@@ -7,6 +7,7 @@ import styles from './Header.module.scss';
 import { useTooltip } from '@/app/hooks/useBootstrap';
 import Logo from '../common/Logo/Logo';
 import { useRouter } from 'next/navigation';
+import { useAuth } from '@/app/lib/contexts/AuthContext';
 
 export default function Header() {
   useTooltip();
@@ -14,6 +15,7 @@ export default function Header() {
   const offcanvasRef = useRef(null);
   const offcanvasInstanceRef = useRef(null);
   const router = useRouter();
+  const { isAuthenticated, user, logout } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -60,8 +62,8 @@ export default function Header() {
       offcanvasInstanceRef.current.hide();
       setTimeout(() => {
         router.push(href);
-      }, 350); 
-    }else {
+      }, 350);
+    } else {
       router.push(href);
     }
   };
@@ -77,6 +79,46 @@ export default function Header() {
     { href: '/become-a-sitter', text: '成為保母', disabled: true },
     { href: '/#index-qna', text: '常見問題' },
   ];
+
+  const authLinks = (
+    <>
+      <Link
+        href="/login"
+        className="d-lg-none btn btn-outline-primary w-100"
+        tabIndex="-1"
+        onClick={(e) => handleLinkClick(e, '/login')}
+      >
+        登入
+      </Link>
+      <Link
+        href="/login"
+        className="d-none d-lg-block btn text-primary border-0 p-0 flex-shrink-0 me-6"
+        tabIndex="-1"
+        onClick={(e) => handleLinkClick(e, '/login')}
+      >
+        登入
+      </Link>
+      <Link
+        href="/register"
+        className="btn btn-primary w-100 w-lg-auto text-white mb-4 mb-lg-0"
+        tabIndex="-1"
+        onClick={(e) => handleLinkClick(e, '/register')}
+      >
+        註冊
+      </Link>
+    </>
+  );
+
+  const userProfiles = (
+    <>
+    <div className='d-flex align-items-center'>
+      <span className="navbar-text me-5">你好, {user?.name}</span>
+      <button className="btn btn-outline-primary" onClick={logout}>
+        登出
+      </button>
+    </div>
+    </>
+  );
 
   return (
     <nav
@@ -145,7 +187,9 @@ export default function Header() {
                     <Link
                       href={link.href}
                       className="nav-link link-gray-100"
-                      onClick={(e) => {handleLinkClick(e, link.href)}}
+                      onClick={(e) => {
+                        handleLinkClick(e, link.href);
+                      }}
                     >
                       {link.text}
                     </Link>
@@ -163,30 +207,7 @@ export default function Header() {
                 className="d-lg-none d-block mt-auto"
                 style={{ objectFit: 'contain' }}
               />
-              <Link
-                href="/login"
-                className="d-lg-none btn btn-outline-primary w-100"
-                tabIndex="-1"
-                onClick={(e) => handleLinkClick(e, '/login')}
-              >
-                登入
-              </Link>
-              <Link
-                href="/login"
-                className="d-none d-lg-block btn text-primary border-0 p-0 flex-shrink-0 me-6"
-                tabIndex="-1"
-                onClick={(e) => handleLinkClick(e, '/login')}
-              >
-                登入
-              </Link>
-              <Link
-                href="/register"
-                className="btn btn-primary w-100 w-lg-auto text-white mb-4 mb-lg-0"
-                tabIndex="-1"
-                onClick={(e) => handleLinkClick(e, '/register')}
-              >
-                註冊
-              </Link>
+              {isAuthenticated? userProfiles : authLinks}
             </div>
           </div>
         </div>
